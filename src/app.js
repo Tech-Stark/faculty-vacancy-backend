@@ -18,12 +18,16 @@ app.use(express.urlencoded({ extended: false })) // for parsing application/x-ww
 auth.authenticateToken.unless = unless
 app.use(auth.authenticateToken.unless({
     path: [
+        { url: '/', methods: ['GET']},
         { url: '/users/login', methods: ['POST']},
         { url: '/users/register', methods: ['POST']},
         { url: '/users/refreshToken', methods: ['POST']}
     ]
 }))
 
+app.get('/', (req, res) => {
+    res.status(200).json({message: "Hello World!"})
+})
 app.use('/users', users) // middleware for listening to routes
 app.use(errors.errorHandler); // middleware for error responses
 
