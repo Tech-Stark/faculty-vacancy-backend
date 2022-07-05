@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
 const { unless } = require("express-unless");
+const port = process.env.PORT || 3000
 
 const auth = require('./helpers/jwt.js');
 const users = require('./controllers/UserController.js')
@@ -33,4 +34,6 @@ const db = mongoose.connection;
 db.on('error', () => logger.log.error('connection error:'));
 db.once('open', () => logger.log.info(`Connected to mongo at ${uri}`));
 
-app.listen(3000);
+app.listen(port, () => {
+    logger.log.info(`Example app listening on port ${port}`)
+})
