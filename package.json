@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon app.js"
+        "start": "nodemon src/app.js"
     },
     "keywords": [],
     "author": "",
@@ -12,10 +12,13 @@
     "dependencies": {
         "@hapi/joi": "^17.1.1",
         "bcryptjs": "^2.4.3",
+        "cors": "^2.8.5",
         "dotenv": "^16.0.1",
         "express": "^4.18.1",
+        "express-unless": "^2.1.0",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^6.4.2",
-        "nodemon": "^2.0.18"
+        "nodemon": "^2.0.18",
+        "save": "^2.5.0"
     }
 }
