@@ -18,8 +18,6 @@ router.post('/login', (req, res, next) => {
     const { email, password} = req.body;
     userServices.login({email, password}).then(user => {
             if(user){                
-                refreshTokens.push(user.refreshToken);
-                console.log(refreshTokens);
                 res.status(200).json(user);
             } 
             else{
