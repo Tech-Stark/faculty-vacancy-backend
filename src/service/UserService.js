@@ -32,7 +32,6 @@ function register(params, res){
 }
 async function getById(id) {
     const user = await User.findById(id);
-    // call toJSON method applied during model instantiation
     return user.toJSON()
 }
 

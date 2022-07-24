@@ -3,10 +3,20 @@ const Profile = require('../models/ProfileModel')
 const logger = require('../logging/logger.js')
 
 
-function updateProfile(user, profile) {
-    profile.profileId = User.findOne({email: user.data}).profileId;
-    const query = Profile.findOneAndUpdate({profileId: profile.profileId}, profile);
-    console.log(query)
+function updateProfile(email, profile, res) {
+    User.findOne({email: email})
+        .then((curUser) => {
+            console.log(curUser);
+            profile.profileId = curUser.profileId;
+            console.log(profile)
+            return Profile.findOneAndUpdate({profileId: curUser.profileId}, profile);            
+        })
+        .then(()=>{
+            res.json({success:true});
+        })
+        .catch(() =>{
+            res.status(400).json({success:false, msg: "Profile Update Unsuccessful"})
+        });
 }
 
 

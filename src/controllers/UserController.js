@@ -28,15 +28,21 @@ router.post('/login', (req, res, next) => {
     ).catch(err => next(err))
 })
 
+/*
+Gets profile by authorization token. 
+*/
 router.get('/profile', (req, res, next) => {
     logger.log.info("profile requested for user "+ req.user.data);
     profileServices.getProfile(req.user.data).then(
         (profile) =>{ 
-            console.log("ok")
-            console.log(profile);
             res.json(profile);
         }
     ).catch(err => next(err))
+})
+
+router.post('/update-profile', (req, res, next) => {
+    logger.log.info("profile updated for user "+ req.user.data);
+    profileServices.updateProfile(req.user.data, req.body, res)
 })
 
 router.get('/:id', (req, res, next) => {
