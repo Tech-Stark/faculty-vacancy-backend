@@ -1,17 +1,50 @@
 const router = require("./UserController");
-const subscriptionServices = require('../service/SubscriptionServics.js')
+const subscriptionServices = require('../service/SubscriptionService.js')
 
 
-router.get('/:id', async(req, res, next) => {
-   
-    let subscriptions =await subscriptionServices.getbyId(req.params.id);
+router.get('/mysubscriptions/:id', async (req, res, next) => {
+  try{
+    let subscriptions =await subscriptionServices.getById(req.params.id);
     res.json(subscriptions);
+
+  }catch(err)
+  {
+    res.json(err)
+  }
+
 })
 
-router.post('/:id', async(req, res, next) => {
-   const profileId=req.params.id;
-   const {locations,colleges}=req.body;
-   let departments= await subscriptionServices.getByFilters({profileId,locations,colleges})
+router.post('/filter', async(req, res, next) => {
+
+  try{
+    const {locations,colleges}=req.body;
+    let departments= await subscriptionServices.getByFilters(locations,colleges)
+    console.log(departments)
+     res.json(departments)
+
+  }catch(err)
+  {
+    res.json(err)
+  }
+ 
+})
+
+router.post('/mysubscriptions/:id', async(req,res,next)=>{
+
+  try{
+    const profileId=req.params.id;
+    const {locations,colleges,department}=req.body;
+  
+    let subscription= await subscriptionServices.createSubscription(profileId,department,locations,colleges)
+    res.json(subscription)
+
+  }catch(err)
+  {
+    res.json(err)
+  }
+
+
+
 })
 
 module.exports = router;
