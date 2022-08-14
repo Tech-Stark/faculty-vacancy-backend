@@ -12,7 +12,7 @@ async function getById(id)
     const subscriptions=await Subscription.find({profileId:id});
     const vacancies = await Vacancy.find();
     let temp=[];
-    for(let i=0;i<(await subscriptions).length;i++)
+    for(let i=0;i< subscriptions.length;i++)
     {
         for(let j=0;j<vacancies.length;j++)
         {
