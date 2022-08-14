@@ -46,6 +46,7 @@ async function getByFilters(locations,colleges){
 async function createSubscription(profileId,department,locations,colleges)
 {
   const subscription = await Subscription.insertMany({profileId,department,locations,colleges});
+  console.log(subscription)
   return subscription;
 }
 
