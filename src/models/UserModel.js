@@ -14,8 +14,15 @@ const UserSchema = new Schema({
         required: true,
         unique: true,
     },
+    firstName: {
+        type: String,
+    },
+    lastName: {
+        type: String,
+    },
     profileId: {
         type: String,
+        unique: true,
     },
     collegeId: {
         type: String,
