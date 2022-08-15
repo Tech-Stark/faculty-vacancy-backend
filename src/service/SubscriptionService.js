@@ -52,10 +52,32 @@ async function createSubscription(user,department,locations,colleges)
   return subscription;
 }
 
+async function getColleges()
+{
+  const clgs = await College.find();
+  const colleges= clgs.map((clg)=>clg.name);
+  return colleges
+}
+
+async function getLocations()
+{
+  const colleges = await College.find();
+  const locs= new Set()
+
+  colleges.forEach((clg)=>{
+    locs.add(clg.location)
+  })
+  
+  const locations =[...locs]
+  return locations
+}
+
 
 
 module.exports = {
   getById,
   getByFilters,
-  createSubscription
+  createSubscription,
+  getColleges,
+  getLocations
 };
