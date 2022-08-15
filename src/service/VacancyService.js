@@ -1,15 +1,18 @@
 const Vacancy = require('../models/VacancyModel');
 const Subscription = require('../models/SubscriptionModel');
-
+const User = require('../models/UserModel')
 async function getAll()
 {
         const vacancies = await Vacancy.find();
 
         return vacancies;
 }
-async function getById(id)
+async function getById(user)
 {
-    const subscriptions=await Subscription.find({profileId:id});
+  
+    const profile=await User.find({email:user.data});
+    const profileId=profile[0].profileId
+    const subscriptions=await Subscription.find({profileId});
     const vacancies = await Vacancy.find();
     let temp=[];
     for(let i=0;i< subscriptions.length;i++)
