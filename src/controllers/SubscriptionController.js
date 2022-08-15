@@ -46,5 +46,13 @@ router.post('/mysubscriptions', async(req,res,next)=>{
 
 
 })
+router.get('/colleges', async(req,res)=>{
+  let colleges= await subscriptionServices.getColleges();
+  res.json(colleges);
+})
+router.get('/locations', async(req,res)=>{
+  let locations= await subscriptionServices.getLocations();
+  res.json(locations);
+})
 
 module.exports = router;
