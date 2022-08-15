@@ -21,7 +21,10 @@ const VacancySchema = new Schema({
             type:String
         },
         compensation:{
-            typr:String
+            type:String
+        },
+        numberOfVacancies:{
+            type:Number
         },
         dateCreated:{
             type:Date
