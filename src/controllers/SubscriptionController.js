@@ -1,4 +1,5 @@
-const router = require("./UserController");
+const express = require('express')
+const router = express.Router();
 const subscriptionServices = require('../service/SubscriptionService.js')
 
 
@@ -34,7 +35,7 @@ router.post('/mysubscriptions/:id', async(req,res,next)=>{
   try{
     const profileId=req.params.id;
     const {locations,colleges,department}=req.body;
-  
+    console.log(profileId)
     let subscription= await subscriptionServices.createSubscription(profileId,department,locations,colleges)
     res.json(subscription)
 
