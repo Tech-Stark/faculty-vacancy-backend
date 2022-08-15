@@ -7,8 +7,10 @@ const port = process.env.PORT || 3000
 
 const auth = require('./helpers/jwt.js');
 const users = require('./controllers/UserController.js')
+const subscriptions = require('./controllers/SubscriptionController.js')
 const errors = require('./helpers/errorHandler.js')
-const logger = require('./logging/logger.js')
+const logger = require('./logging/logger.js');
+const Subscription = require('./models/SubscriptionModel.js');
 
 app.use(cors());
 app.use((req, res, next) => {
@@ -23,19 +25,20 @@ app.use(express.urlencoded({ extended: false })) // for parsing application/x-ww
 
 // middleware for authenticating token submitted with requests
 auth.authenticateToken.unless = unless
-app.use(auth.authenticateToken.unless({
-    path: [
-        { url: '/', methods: ['GET']},
-        { url: '/users/login', methods: ['POST']},
-        { url: '/users/register', methods: ['POST']},
-        { url: '/users/refreshToken', methods: ['POST']}
-    ]
-}))
+// app.use(auth.authenticateToken.unless({
+//     path: [
+//         { url: '/', methods: ['GET']},
+//         { url: '/users/login', methods: ['POST']},
+//         { url: '/users/register', methods: ['POST']},
+//         { url: '/users/refreshToken', methods: ['POST']}
+//     ]
+// }))
 
 app.get('/', (req, res) => {
     res.status(200).json({message: "Hello World!"})
 })
 app.use('/users', users) // middleware for listening to routes
+app.use('/subscriptions', subscriptions) 
 app.use(errors.errorHandler); // middleware for error responses
 
 // MongoDB connection, success and error event responses
