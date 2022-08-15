@@ -13,11 +13,11 @@ router.get("/",async (req,res)=>{
         res.json(err)
     }
 })
-router.get("/subscribedvacancies/:id",async (req,res)=>{
+router.get("/subscribedvacancies",async (req,res)=>{
 
     try{
-        const vacancies=await vacancyServices.getById(req.params.id);
-        res.json(vacancies);
+        const vacancies=await vacancyServices.getById(req.user);
+        res.json(vacancies)
     } catch(err)
     {   
         res.json(err)

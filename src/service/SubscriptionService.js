@@ -1,10 +1,13 @@
 const Subscription = require('../models/SubscriptionModel');
-const College =require('../models/CollegeModel.js')
+const College =require('../models/CollegeModel.js');
+const { loggers } = require('winston');
+const User = require('../models/UserModel')
 
-
-async function getById(id) {
-  
-   const subscriptions = await Subscription.find({profileId:ids});
+async function getById(user) {
+  const profile=await User.find({email:user.data});
+  const profileId=profile[0].profileId
+  console.log(profile)
+   const subscriptions = await Subscription.find({profileId});
     return subscriptions
 
 }
@@ -26,11 +29,9 @@ async function getByFilters(locations,colleges){
         {
           if(possibleColleges[j].departments.includes(allDepartments[i]))
           {
-            console.log(possibleColleges[j].name)
             temp.push(possibleColleges[j].name)
           }
         }
-        console.log(temp)
         departments.set(allDepartments[i],temp)
     }
 
@@ -43,10 +44,11 @@ async function getByFilters(locations,colleges){
    // console.log(departments);
     return deps
 } 
-async function createSubscription(profileId,department,locations,colleges)
+async function createSubscription(user,department,locations,colleges)
 {
+  const profile=await User.find({email:user.data});
+  const profileId=profile[0].profileId
   const subscription = await Subscription.insertMany({profileId,department,locations,colleges});
-  console.log(subscription)
   return subscription;
 }
 
