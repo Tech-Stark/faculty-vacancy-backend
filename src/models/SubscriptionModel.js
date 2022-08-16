@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const SubscriptionSchema = new Schema({
+    subscriptionId:{
+        type:String
+    },
     profileId:{
         type:String
     },
