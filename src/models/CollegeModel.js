@@ -12,6 +12,9 @@ const CollegeSchema = new Schema({
     location:{
         type:String
     },
+    departments:{
+        type:[{type:String}]
+    }
 
 });
 
