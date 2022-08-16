@@ -21,7 +21,7 @@ function authenticateToken(req, res, next) {
 }
 
 function generateAccessToken(email) {
-    return jwt.sign({data: email}, process.env.TOKEN_SECRET, { expiresIn: '24h' });
+    return jwt.sign({data: email}, process.env.TOKEN_SECRET, { expiresIn: '96h' });
 }
 
 module.exports = {

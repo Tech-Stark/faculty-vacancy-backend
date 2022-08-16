@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router();
 const subscriptionServices = require('../service/SubscriptionService.js')
-const Profile = require('../models/ProfileModel')
+const Profile = require('../models/ProfileModel');
+const Subscription = require('../models/SubscriptionModel.js');
 
 router.get('/mysubscriptions', async (req, res, next) => {
   try{
@@ -45,6 +46,17 @@ router.post('/mysubscriptions', async(req,res,next)=>{
 
 
 
+})
+
+router.post('/delete/:id',async (req,res)=>
+{
+  try{
+        const subscription=subscriptionServices.deleteById(req.params.id)
+        res.json("success");
+  }catch(err)
+  {
+    res.json(err);
+  }
 })
 router.get('/colleges', async(req,res)=>{
   let colleges= await subscriptionServices.getColleges();

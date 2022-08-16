@@ -2,7 +2,8 @@ const Subscription = require('../models/SubscriptionModel');
 const College =require('../models/CollegeModel.js');
 const { loggers } = require('winston');
 const User = require('../models/UserModel')
-
+const { v4: uuidv4 } = require('uuid');
+const res = require('express/lib/response');
 async function getById(user) {
   const profile=await User.find({email:user.data});
   const profileId=profile[0].profileId
@@ -48,8 +49,15 @@ async function createSubscription(user,department,locations,colleges)
 {
   const profile=await User.find({email:user.data});
   const profileId=profile[0].profileId
-  const subscription = await Subscription.insertMany({profileId,department,locations,colleges});
+  const subscriptionId=uuidv4();
+  const subscription = await Subscription.insertMany({subscriptionId,profileId,department,locations,colleges});
   return subscription;
+}
+
+async function deleteById(subscriptionId)
+{
+  const subscription =await Subscription.deleteOne({subscriptionId});
+  return (subscription);
 }
 
 async function getColleges()
@@ -79,5 +87,6 @@ module.exports = {
   getByFilters,
   createSubscription,
   getColleges,
-  getLocations
+  getLocations,
+  deleteById
 };
