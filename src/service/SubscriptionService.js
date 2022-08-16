@@ -1,10 +1,14 @@
 const Subscription = require('../models/SubscriptionModel');
-const College =require('../models/CollegeModel.js')
-
-
-async function getById(id) {
-  
-   const subscriptions = await Subscription.find({profileId:ids});
+const College =require('../models/CollegeModel.js');
+const { loggers } = require('winston');
+const User = require('../models/UserModel')
+const { v4: uuidv4 } = require('uuid');
+const res = require('express/lib/response');
+async function getById(user) {
+  const profile=await User.find({email:user.data});
+  const profileId=profile[0].profileId
+  console.log(profile)
+   const subscriptions = await Subscription.find({profileId});
     return subscriptions
 
 }
@@ -26,11 +30,9 @@ async function getByFilters(locations,colleges){
         {
           if(possibleColleges[j].departments.includes(allDepartments[i]))
           {
-            console.log(possibleColleges[j].name)
             temp.push(possibleColleges[j].name)
           }
         }
-        console.log(temp)
         departments.set(allDepartments[i],temp)
     }
 
@@ -43,11 +45,39 @@ async function getByFilters(locations,colleges){
    // console.log(departments);
     return deps
 } 
-async function createSubscription(profileId,department,locations,colleges)
+async function createSubscription(user,department,locations,colleges)
 {
-  const subscription = await Subscription.insertMany({profileId,department,locations,colleges});
-  console.log(subscription)
+  const profile=await User.find({email:user.data});
+  const profileId=profile[0].profileId
+  const subscriptionId=uuidv4();
+  const subscription = await Subscription.insertMany({subscriptionId,profileId,department,locations,colleges});
   return subscription;
+}
+
+async function deleteById(subscriptionId)
+{
+  const subscription =await Subscription.deleteOne({subscriptionId});
+  return (subscription);
+}
+
+async function getColleges()
+{
+  const clgs = await College.find();
+  const colleges= clgs.map((clg)=>clg.name);
+  return colleges
+}
+
+async function getLocations()
+{
+  const colleges = await College.find();
+  const locs= new Set()
+
+  colleges.forEach((clg)=>{
+    locs.add(clg.location)
+  })
+  
+  const locations =[...locs]
+  return locations
 }
 
 
@@ -55,5 +85,8 @@ async function createSubscription(profileId,department,locations,colleges)
 module.exports = {
   getById,
   getByFilters,
-  createSubscription
+  createSubscription,
+  getColleges,
+  getLocations,
+  deleteById
 };
