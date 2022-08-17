@@ -34,4 +34,22 @@ router.post("/createvacancy", async(req, res) =>{
 
 })
 
+router.post("/closevacancy/:id", async(req, res) =>{
+    //when the position in filled
+    vacancyServices.closeVacancyById(req.params.id)
+        .then(()=> {
+            res.status(200).json({"status":"success"});
+        })
+    .catch(err => next(err));
+
+})
+
+router.post("/", async(req, res) =>{
+    vacancyServices.createVacancy(req.body)
+        .then(()=> {
+            res.status(200).json({"status":"success"});
+        })
+    .catch(err => next(err));
+
+})
 module.exports = router;

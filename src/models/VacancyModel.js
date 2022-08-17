@@ -33,6 +33,9 @@ const VacancySchema = new Schema({
     },
     dateCreated:{
         type:Date
+    },
+    status:{
+        type: String
     }
 });
 

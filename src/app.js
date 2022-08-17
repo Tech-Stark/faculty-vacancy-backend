@@ -11,6 +11,7 @@ const auth = require('./helpers/jwt.js');
 const users = require('./controllers/UserController.js')
 const subscriptions = require('./controllers/SubscriptionController.js')
 const vacancies = require('./controllers/VacancyController.js')
+const admin = require('./controllers/AdminController.js')
 const errors = require('./helpers/errorHandler.js')
 const logger = require('./logging/logger.js');
 const Subscription = require('./models/SubscriptionModel.js');
@@ -36,7 +37,8 @@ app.use(auth.authenticateToken.unless({
         { url: '/', methods: ['GET']},
         { url: '/users/login', methods: ['POST']},
         { url: '/users/register', methods: ['POST']},
-        { url: '/users/refreshToken', methods: ['POST']}
+        { url: '/users/refreshToken', methods: ['POST']},
+        { url: '/admin/login', methods: ['POST']}
     ]
 }))
 
@@ -46,6 +48,7 @@ app.get('/', (req, res) => {
 app.use('/users', users) // middleware for listening to routes
 app.use('/subscriptions', subscriptions) 
 app.use('/vacancies', vacancies) 
+app.use('/admin', admin)
 app.use(errors.errorHandler); // middleware for error responses
 
 // MongoDB connection, success and error event responses

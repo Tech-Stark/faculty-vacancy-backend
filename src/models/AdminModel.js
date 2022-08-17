@@ -13,10 +13,6 @@ const AdminSchema = new Schema({
     lastName: {
         type: String,
     },
-    id: {
-        type: String,
-        unique: true,
-    },
     adminRole: {
         type: String,
     },

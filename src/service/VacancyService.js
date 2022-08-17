@@ -6,9 +6,18 @@ const { v4: uuidv4 } = require('uuid');
 async function createVacancy(params){
     const vacancy = new Vacancy(params);
     vacancy.vacancyId = uuidv4();
+    vacancy.status = "open";
     vacancy
         .save()
 }
+
+
+async function closeVacancyById(vacancyId)
+{
+  const vacancy = await Vacancy.deleteOne({vacancyId: vacancyId});
+  return (vacancy);
+}
+
 async function getAll()
 {
     const vacancies = await Vacancy.find();
@@ -41,5 +50,6 @@ async function getById(user)
 module.exports = {
    getAll,
    getById,
-   createVacancy
+   createVacancy,
+   closeVacancyById
   };
