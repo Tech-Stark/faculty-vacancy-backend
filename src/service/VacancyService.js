@@ -1,11 +1,18 @@
 const Vacancy = require('../models/VacancyModel');
 const Subscription = require('../models/SubscriptionModel');
 const User = require('../models/UserModel')
+const { v4: uuidv4 } = require('uuid');
+
+async function createVacancy(params){
+    const vacancy = new Vacancy(params);
+    vacancy.vacancyId = uuidv4();
+    vacancy
+        .save()
+}
 async function getAll()
 {
-        const vacancies = await Vacancy.find();
-
-        return vacancies;
+    const vacancies = await Vacancy.find();
+    return vacancies;
 }
 async function getById(user)
 {
@@ -33,5 +40,6 @@ async function getById(user)
 
 module.exports = {
    getAll,
-   getById
+   getById,
+   createVacancy
   };
