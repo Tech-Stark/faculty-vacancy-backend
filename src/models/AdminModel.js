@@ -1,14 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const UserSchema = new Schema({
-    password: {
-        type: String,
-        required: true,
-    },
-    dob: {
-        type: Date,
-    },
+const AdminSchema = new Schema({
     email: {
         type: String,
         required: true,
@@ -20,27 +13,12 @@ const UserSchema = new Schema({
     lastName: {
         type: String,
     },
-    profileId: {
-        type: String,
-        unique: true,
-    },
-    collegeId: {
+    adminRole: {
         type: String,
     },
-    isOpenToWork: {
-        type: Boolean,
-    },
-    dateJoined: {
-        type: Date,
-        default: Date.now(),
-    },
-    exit: {
-        type: String,
-        default: "none"
-    }
 });
 
-UserSchema.set('toJSON', {
+AdminSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
@@ -50,6 +28,6 @@ UserSchema.set('toJSON', {
     }
 })
 
-const User =  mongoose.model("user", UserSchema);
+const Admin =  mongoose.model("admin", AdminSchema);
 
-module.exports = User;
+module.exports = Admin;
