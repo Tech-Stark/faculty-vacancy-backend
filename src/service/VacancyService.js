@@ -30,7 +30,7 @@ async function getById(user)
     const profileId=profile[0].profileId
     const subscriptions=await Subscription.find({profileId});
     const vacancies = await Vacancy.find();
-    let temp=[];
+    let st = new Set();
     for(let i=0;i< subscriptions.length;i++)
     {
         for(let j=0;j<vacancies.length;j++)
@@ -39,11 +39,11 @@ async function getById(user)
                 (subscriptions[i].colleges.includes(vacancies[j].college)
                 ||(subscriptions[i].locations.includes(vacancies[j].location))))
                 {
-                    temp.push(vacancies[j])
+                    st.add(vacancies[j])
                 }
         }
     }
-    return temp;
+    return Array.from(st);
     
 }
 
