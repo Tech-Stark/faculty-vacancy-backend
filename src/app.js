@@ -81,21 +81,15 @@ cron.schedule('0 1 * * * *', async () => {
         var diffDays = days(dob, todayDate);
         logger.log.trace(diffDays +" days to retirement");
         if(diffDays <= masterData.AlertCountDownDay){
-            console.log("Entering in pending");
             allUsers[i].exit = "pending";
         }
         else{
-            console.log("NOPE");
             if(allUsers[i].exit = "pending")
                 allUsers[i].exit = "none";
         }
-        // else{
-            // }
         userDataService.updateUser(allUsers[i]);
         console.log(allUsers[i]);
-        // allUsers.save();
     }
-
 });
 app.listen(port, () => {
     logger.log.info(`Example app listening on port ${port}`)

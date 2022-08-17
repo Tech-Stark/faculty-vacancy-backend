@@ -16,6 +16,9 @@ const AdminSchema = new Schema({
     adminRole: {
         type: String,
     },
+    college: {
+        type: String,
+    }
 });
 
 AdminSchema.set('toJSON', {
