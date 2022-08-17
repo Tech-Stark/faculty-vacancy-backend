@@ -88,6 +88,11 @@ router.post("/closevacancy/:id", async(req, res) =>{
 
 })
 
+router.post("/deletevacancy/:id", async(req, res) => {
+    vacancyServices.deleteVacancyById(req.params.id);
+    res.json({success:"true"});
+})
+
 router.post("/", async(req, res) =>{
     vacancyServices.createVacancy(req.body)
         .then(()=> {

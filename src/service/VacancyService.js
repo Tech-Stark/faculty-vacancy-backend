@@ -14,7 +14,9 @@ async function createVacancy(params){
 
 async function closeVacancyById(vacancyId)
 {
-  const vacancy = await Vacancy.deleteOne({vacancyId: vacancyId});
+  const vacancy = await Vacancy.findOne({vacancyId: vacancyId});
+  vacancy.status = "filled";
+  await Vacancy.findOneAndUpdate({vacancyId:vacancyId}, vacancy)
   return (vacancy);
 }
 
@@ -22,6 +24,11 @@ async function getAll()
 {
     const vacancies = await Vacancy.find();
     return vacancies;
+}
+
+async function deleteVacancyById(vacancyId){
+    const vacancy = await Vacancy.deleteOne({vacancyId: vacancyId});
+    return (vacancy);
 }
 async function getById(user)
 {
