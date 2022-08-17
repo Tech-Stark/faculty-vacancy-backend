@@ -3,6 +3,8 @@ const Profile = require('../models/ProfileModel')
 const bcrypt = require('bcryptjs');
 const auth = require('../helpers/jwt.js')
 const { v4: uuidv4 } = require('uuid');
+const logger = require('../logging/logger');
+
 
 
 async function login({ email, password }) {
@@ -30,13 +32,26 @@ function register(params, res){
             res.status(400).json({success:false, msg: "A user already exists with the same email"});
         });
 }
+async function getAllUsers(){
+    return await User.find();
+}
+
+async function updateUser(user){
+    const updatedUser = await User.findOneAndUpdate({email: user.email}, user);
+    // logger.log.trace("Updated as the following model: ")
+    // logger.log.trace(updatedUser);
+}
+
 async function getById(id) {
     const user = await User.findById(id);
     return user.toJSON()
 }
 
+
 module.exports = {
     login,
     register,
-    getById
+    getById,
+    getAllUsers,
+    updateUser
 };
