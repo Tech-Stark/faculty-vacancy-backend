@@ -55,8 +55,8 @@ router.get("/getvacancyfordays/:noOfDays", async (req, res, next) => {
         next(err);
     }
 })
-router.get("/subscribedvacancies",async (req,res,next)=>{
 
+router.get("/subscribedvacancies",async (req,res,next)=>{
     try{
         const vacancies=await vacancyServices.getById(req.user);
         res.json(vacancies)
@@ -81,6 +81,7 @@ router.post("/closevacancy/:id", async(req, res,next) =>{
 
     vacancyServices.closeVacancyById(req.params.id)
         .then(()=> {
+            // TODO:    
             res.status(200).json({"status":"success"});
         })
     .catch(err => next(err));
@@ -92,12 +93,4 @@ router.post("/deletevacancy/:id", async(req, res) => {
     res.json({success:"true"});
 })
 
-router.post("/", async(req, res,next) =>{
-    vacancyServices.createVacancy(req.body)
-        .then(()=> {
-            res.status(200).json({"status":"success"});
-        })
-    .catch(err => next(err));
-
-})
 module.exports = router;
