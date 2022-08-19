@@ -47,11 +47,17 @@ async function getById(id) {
     return user.toJSON()
 }
 
+async function getUserByProfileId(profileId){
+    const user = await User.findOne({profileId:profileId});
+    return user;
+}
+
 
 module.exports = {
     login,
     register,
     getById,
     getAllUsers,
-    updateUser
+    updateUser,
+    getUserByProfileId
 };

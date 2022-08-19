@@ -11,7 +11,6 @@ async function createVacancy(params){
         .save()
 }
 
-
 async function closeVacancyById(vacancyId)
 {
   const vacancy = await Vacancy.findOne({vacancyId: vacancyId});
@@ -54,9 +53,16 @@ async function getById(user)
     
 }
 
+async function getVacancyById(vacancyId){
+    const vacancy = await Vacancy.findOne({vacancyId: vacancyId});
+    return vacancy;
+}
+
 module.exports = {
    getAll,
    getById,
    createVacancy,
-   closeVacancyById
+   closeVacancyById,
+   deleteVacancyById,
+   getVacancyById
   };
