@@ -47,11 +47,22 @@ async function getById(id) {
     return user.toJSON()
 }
 
+async function getUserByProfileId(profileId){
+    const user = await User.findOne({profileId:profileId});
+    return user;
+}
+async function getAllTeachers()
+{
+    const teachers=await User.find({exit:"none"});
+    return teachers
+}
 
 module.exports = {
     login,
     register,
     getById,
     getAllUsers,
-    updateUser
+    updateUser,
+    getUserByProfileId,
+    getAllTeachers
 };

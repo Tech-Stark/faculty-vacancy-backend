@@ -40,6 +40,10 @@ router.get('/profile', (req, res, next) => {
     ).catch(err => next(err))
 })
 
+// router.get('/getallteachers', async (req, res, next) => {
+
+// })
+
 router.post('/update-profile', (req, res, next) => {
     logger.log.info("profile updated for user "+ req.user.data);
     profileServices.updateProfile(req.user.data, req.body, res)
