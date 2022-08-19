@@ -13,7 +13,7 @@ router.get("/",async (req,res)=>{
         res.json(err)
     }
 })
-router.get("/subscribedvacancies",async (req,res)=>{
+router.get("/subscribedvacancies",async (req,res,next)=>{
 
     try{
         const vacancies=await vacancyServices.getById(req.user);
@@ -25,7 +25,7 @@ router.get("/subscribedvacancies",async (req,res)=>{
   
 })
 
-router.post("/createvacancy", async(req, res) =>{
+router.post("/createvacancy", async(req, res,next) =>{
     vacancyServices.createVacancy(req.body)
         .then(()=> {
             res.status(200).json({"status":"success"});
@@ -34,7 +34,7 @@ router.post("/createvacancy", async(req, res) =>{
 
 })
 
-router.post("/closevacancy/:id", async(req, res) =>{
+router.post("/closevacancy/:id", async(req, res,next) =>{
     //when the position in filled
     vacancyServices.closeVacancyById(req.params.id)
         .then(()=> {
@@ -44,7 +44,7 @@ router.post("/closevacancy/:id", async(req, res) =>{
 
 })
 
-router.post("/", async(req, res) =>{
+router.post("/", async(req, res,next) =>{
     vacancyServices.createVacancy(req.body)
         .then(()=> {
             res.status(200).json({"status":"success"});
