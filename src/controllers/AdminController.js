@@ -15,7 +15,7 @@ router.post('/login', async (req, res, next) => {
         const user = await userServices.login({email, password})
         const status = await Admin.findOne({email: email}) 
         if(user && status != null){
-            User.findOneAndUpdate({email: email}, user);         
+            // User.findOneAndUpdate({email: email}, user);         
             res.status(200).json(user);
         } 
         else{
@@ -25,6 +25,37 @@ router.post('/login', async (req, res, next) => {
     catch(err){
         next(err);
     }
+})
+
+
+router.post("/createvacancy", async(req, res,next) =>{
+    vacancyServices.createVacancy(req.body)
+        .then(()=> {
+            res.status(200).json({"status":"success"});
+        })
+    .catch(err => next(err));
+
+})
+
+router.post("/closevacancy/:id", async(req, res,next) =>{
+    //when the position in filled
+
+    vacancyServices.closeVacancyById(req.params.id)
+        .then(()=> {
+            // TODO:    
+            res.status(200).json({"status":"success"});
+        })
+    .catch(err => next(err));
+
+})
+
+router.post('/deletevacancy/:id', async(req, res) => {
+    vacancyServices.deleteVacancyById(req.params.id);
+    res.json({success:"true"});
+})
+
+router.get('/getallteachers', async(req, res, next) => {
+    
 })
 
 router.post('/mail/invite', async(req, res, next) => {
