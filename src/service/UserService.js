@@ -51,7 +51,11 @@ async function getUserByProfileId(profileId){
     const user = await User.findOne({profileId:profileId});
     return user;
 }
-
+async function getAllTeachers()
+{
+    const teachers=await User.find({exit:"none"});
+    return teachers
+}
 
 module.exports = {
     login,
@@ -59,5 +63,6 @@ module.exports = {
     getById,
     getAllUsers,
     updateUser,
-    getUserByProfileId
+    getUserByProfileId,
+    getAllTeachers
 };

@@ -77,4 +77,9 @@ router.post('/mail/invite', async(req, res, next) => {
 
 }) 
 
+router.get('/getallteachers', async (req,res)=>{
+  const teachers = await userServices.getAllTeachers();
+  res.json(teachers);
+})
+
 module.exports = router;
