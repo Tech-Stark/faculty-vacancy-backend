@@ -4,11 +4,24 @@ const User = require('../models/UserModel')
 const { v4: uuidv4 } = require('uuid');
 
 async function createVacancy(params){
-    const vacancy = new Vacancy(params);
-    vacancy.vacancyId = uuidv4();
-    vacancy.status = "open";
-    vacancy
-        .save()
+
+    var{position,department,college}=params;
+    const exvacancies= await Vacancy.find({position,department,college});
+    console.log(exvacancies.length)
+    if(exvacancies.length==0)
+    {
+        const vacancy = new Vacancy(params);
+        vacancy.vacancyId = uuidv4();
+        vacancy.status = "open";
+        vacancy
+            .save()
+    }
+    else{
+        const exvacancyId=exvacancies[0].vacancyId;
+        const vacancy=await Vacancy.findOneAndUpdate({"vacancyId":exvacancyId},{$inc : {'numberOfVacancies' : 1}});
+        console.log(vacancy)
+    }
+  
 }
 
 
