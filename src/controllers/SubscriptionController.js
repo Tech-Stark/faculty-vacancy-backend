@@ -34,8 +34,10 @@ router.post('/filter', async(req, res, next) => {
 router.post('/mysubscriptions', async(req,res,next)=>{
 
   try{
-    const user=req.user
+    const user=req.user;
+    console.log(req.user)
     const {colleges,department}=req.body;
+    console.log(user)
     let subscription= await subscriptionServices.createSubscription(user,department,colleges)
     res.json(subscription)
 
