@@ -20,10 +20,13 @@ function authenticateToken(req, res, next) {
         req.user = user
         Admin.findOne({email: req.user.data})
             .then((user)=>{
-                if(user)
-                    req.role = "user"
-                else
+                if(user){
                     req.role = "admin"
+                    req.collegeId = user.collegeId
+                }
+                else{
+                    req.role = "user"
+                }
                 logger.log.trace("role "+ req.role)
                 next()
             })

@@ -11,9 +11,6 @@ const SubscriptionSchema = new Schema({
     department:{
         type:String
     },
-    locations:{
-        type:[{type:String}]
-    },
     colleges:{
         type:[{type:String}]
     }

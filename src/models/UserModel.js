@@ -20,6 +20,12 @@ const UserSchema = new Schema({
     lastName: {
         type: String,
     },
+    position:{
+        type:String
+    },
+    departent:{
+        type:String
+    },
     profileId: {
         type: String,
         unique: true,
