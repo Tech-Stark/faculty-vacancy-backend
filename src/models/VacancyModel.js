@@ -16,6 +16,9 @@ const VacancySchema = new Schema({
     college:{
         type:String
     },
+    collegeId:{
+        type:String
+    },
     location:{
         type:String
     },

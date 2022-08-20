@@ -5,9 +5,15 @@ const { v4: uuidv4 } = require('uuid');
 
 async function createVacancy(params){
 
-    var{position,department,college}=params;
+    var{position,department,college,
+        
+        
+        email}=params;
     const exvacancies= await Vacancy.find({position,department,college});
-    console.log(exvacancies.length)
+    // console.log(exvacancies.length)
+    const teacher = User.findOneAndUpdate({email}, {
+        exit:"exit"
+    })
     if(exvacancies.length==0)
     {
         const vacancy = new Vacancy(params);
@@ -35,6 +41,17 @@ async function closeVacancyById(vacancyId)
 async function getAll()
 {
     const vacancies = await Vacancy.find();
+    return vacancies;
+}
+
+async function getOngoingVacancies(collegeId){
+    // gets all the vacancy posting for this specific college
+    const vacancies = await Vacancy.find({collegeId, status:"ongoing"})
+    return vacancies;
+}
+
+async function getCompletedVacancies(collegeId){
+    const vacancies = await Vacancy.find({collegeId, status:"completed"})
     return vacancies;
 }
 
@@ -71,11 +88,21 @@ async function getVacancyById(vacancyId){
     return vacancy;
 }
 
+async function markCompleted(vacancyId){
+    const vacancy = await Vacancy.findOneAndUpdate({vacancyId}, {
+        status:"completed"
+    })
+    return vacancy;
+}
+
 module.exports = {
    getAll,
    getById,
    createVacancy,
    closeVacancyById,
    deleteVacancyById,
-   getVacancyById
+   getVacancyById,
+   getCompletedVacancies,
+   getOngoingVacancies,
+   markCompleted
   };

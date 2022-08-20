@@ -22,10 +22,11 @@ function authenticateToken(req, res, next) {
             .then((user)=>{
                 if(user){
                     req.role = "admin"
-                    req.college = user.college
+                    req.collegeId = user.collegeId
                 }
                 else{
-                    req.role = "user"}
+                    req.role = "user"
+                }
                 logger.log.trace("role "+ req.role)
                 next()
             })

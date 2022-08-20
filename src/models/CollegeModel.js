@@ -14,7 +14,8 @@ const CollegeSchema = new Schema({
     },
     departments:{
         type:[{type:String}]
-    }
+    },
+
 
 });
 
