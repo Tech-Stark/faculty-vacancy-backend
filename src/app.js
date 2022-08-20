@@ -17,7 +17,10 @@ const logger = require('./logging/logger.js');
 const Subscription = require('./models/SubscriptionModel.js');
 const masterDataService = require('./service/MasterDataService');
 const userDataService = require('./service/UserService');
+const adminDataService = require('./service/AdminService');
 const { date } = require('@hapi/joi/lib/template.js');
+const Mailer = require('./service/mailer')
+const Constants = require('./Constants')
 
 app.use(cors());
 app.use((req, res, next) => {
@@ -65,37 +68,43 @@ cron.schedule('0 1 * * * *', async () => {
     // teacher -> pending (vacancy), -> 
     var masterData = await masterDataService.getMasterData()
     logger.log.trace(masterData);
-    var allUsers = await userDataService.getAllUsers()        
-    logger.log.trace(allUsers)
-    for(let i = 0; i < allUsers.length; i++){
-        var dob = allUsers[i].dob;
-        logger.log.trace(dob);
-        dob.setFullYear(dob.getFullYear() + masterData.RetirementAge);
-        logger.log.trace(dob)
-        var todayDate = new Date();
-        const days = (dob, todayDate) =>{
-            let difference = dob.getTime() - todayDate.getTime();
-            let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
-            return TotalDays;
-        }
-        var diffDays = days(dob, todayDate);
-        logger.log.trace(diffDays +" days to retirement");
-        if(diffDays <= masterData.AlertCountDownDay){
-            console.log("Entering in pending");
-            allUsers[i].exit = "pending";
-        }
-        else{
-            console.log("NOPE");
-            if(allUsers[i].exit = "pending")
-                allUsers[i].exit = "none";
-        }
-        // else{
-            // }
-        userDataService.updateUser(allUsers[i]);
-        console.log(allUsers[i]);
-        // allUsers.save();
-    }
+    var totalAllUsers = await userDataService.getAllUsers()
+    var allAdmins = await adminDataService.getAllAdminData()
+    for(let j = 0; j < allAdmins.length; j++){
+        var countPending = 0;
+        const allUsers = totalAllUsers.filter((user) => allAdmins[j].collegeId == user.collegeId)       
+        for(let i = 0; i < allUsers.length; i++){
+            var dob = allUsers[i].dob;
+            logger.log.trace(dob);
+            dob.setFullYear(dob.getFullYear() + masterData.RetirementAge);
+            logger.log.trace(dob)
+            var todayDate = new Date();
+            const days = (dob, todayDate) =>{
+                let difference = dob.getTime() - todayDate.getTime();
+                let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+                return TotalDays;
+            }
+            var diffDays = days(dob, todayDate);
+            logger.log.trace(diffDays +" days to retirement");
 
+            if(diffDays <= masterData.AlertCountDownDay){
+                allUsers[i].exit = "pending";
+                countPending ++;
+            }
+            userDataService.updateUser(allUsers[i]);
+            console.log(allUsers[i]);
+        }
+        if(countPending > 0){
+            Mailer.sendMail({
+                to: allAdmins[j].email,
+                subject: Constants.MAIL_INVITE_SUBJECT,
+                text: Constants.MAIL_VACANCY_ADMIN_REMINDER_TEXT + countPending
+            })
+        }
+
+    }        
+    // logger.log.trace(allUsers)
+    
 });
 app.listen(port, () => {
     logger.log.info(`Example app listening on port ${port}`)

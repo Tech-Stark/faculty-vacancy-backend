@@ -1,9 +1,13 @@
 const express = require('express')
 const router = express.Router();
 const userServices = require('../service/UserService.js')
+const vacancyService = require('../service/VacancyService')
+const adminService = require('../service/AdminService')
 const logger = require('../logging/logger.js')
 const Admin = require('../models/AdminModel');
 const User = require('../models/UserModel.js');
+const Mailer = require('../service/mailer')
+const Constants = require('../Constants')
 
 
 router.post('/login', async (req, res, next) => {
@@ -12,7 +16,7 @@ router.post('/login', async (req, res, next) => {
         const user = await userServices.login({email, password})
         const status = await Admin.findOne({email: email}) 
         if(user && status != null){
-            User.findOneAndUpdate({email: email}, user);         
+            // User.findOneAndUpdate({email: email}, user);         
             res.status(200).json(user);
         } 
         else{
@@ -25,4 +29,150 @@ router.post('/login', async (req, res, next) => {
 })
 
 
+router.post("/createvacancy", async(req, res,next) =>{
+    vacancyServices.createVacancy(req.body)
+        .then(()=> {
+            res.status(200).json({"status":"success"});
+        })
+    .catch(err => next(err));
+
+})
+
+// router.post("/closevacancy/:id", async(req, res,next) =>{
+//     //when the position in filled
+
+//     vacancyServices.closeVacancyById(req.params.id)
+//         .then(()=> {
+//             // TODO:    
+//             res.status(200).json({"status":"success"});
+//         })
+//     .catch(err => next(err));
+
+// })
+
+router.post('/deletevacancy/:id', async(req, res) => {
+    vacancyServices.deleteVacancyById(req.params.id);
+    res.json({success:"true"});
+})
+
+router.get('/getallteachers', async(req, res, next) => {
+    const teachers = await userServices.getAllTeachers();    
+    res.json(teachers);    
+})
+
+router.get('/getmycollegeteachers', async(req, res, next)=>{
+    const adminCollege = req.collegeId;
+    const teachers = await userServices.getCollegeTeachers(adminCollege);
+    res.json(teachers)
+})
+
+router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
+    try{
+        var masterData = await masterDataService.getMasterData()
+        logger.log.trace(masterData);
+        var allUsers = await userDataService.getCollegeTeachers(req.collegeId)        
+        logger.log.trace(allUsers)
+        for(let i = 0; i < allUsers.length; i++){
+            var dob = allUsers[i].dob;
+            logger.log.trace(allUsers[i]);
+            logger.log.trace(dob);
+            dob.setFullYear(dob.getFullYear() + masterData.RetirementAge);
+            logger.log.trace(dob)
+            var todayDate = new Date();
+            const days = (dob, todayDate) =>{
+                let difference = dob.getTime() - todayDate.getTime();
+                let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+                return TotalDays;
+            }
+            var diffDays = days(dob, todayDate);
+            logger.log.trace(diffDays +" days to retirement");
+            var tmp = [];
+            var noOfDays = req.params.noOfDays
+            console.log(diffDays);
+            console.log(noOfDays)
+            if(diffDays <= noOfDays && (allUsers[i].exit == "none" || allUsers[i].exit == "pending")){
+                allUsers[i].exit = "pending";
+                tmp.push(allUsers[i]);
+            }  
+            
+        }
+        res.json(tmp);
+    }
+    catch(err){
+        next(err);
+    }
+})
+
+router.post('/mail/invite', async(req, res, next) => {
+    const {vacancyId, profileIdList} = req.body;
+    // send the url to all the profile email ids 
+    vacancy = await vacancyService.getVacancyById(vacancyId);
+    var mailingList =  []
+    for(let i = 0; i < profileIdList.length; i++){
+        var user = await User.getUserByProfileId(profileIdList[i]);
+        mailingList.add(user.email);
+    }
+    for(let i = 0; i < mailingList.length; i++){
+        var params = {}
+        params.to = mailingList[i];
+        params.subject  = Constants.MAIL_INVITE_SUBJECT
+        params.text = Constants.MAIL_INVITE_TEXT + 'at ' + (vacancy.url != null? vacancy.url :'');
+        Mailer.sendMail(params)
+    }
+
+}) 
+
+router.get('/getongoingvacancies', async(req, res, next) =>{
+    try{
+        const ongoingVac = await vacancyService.getOngoingVacancies(req.collegeId);
+        res.json(ongoingVac)
+    }
+    catch(err){
+        next(err);
+    }
+})
+
+router.get('/getcompletedvacancies', async(req, res, next) =>{
+    try{
+        const completedVac = await vacancyService.getCompletedVacancies(req.collegeId)
+        res.json(completedVac)
+    }
+    catch(err){
+        next(err);
+    }
+})
+
+router.post('/markcompleted/:vacancyId', async(req, res, next) =>{
+    try{
+        const vacancy = await vacancyService.markComplete(req.params.vacancyId);
+        res.json({success:"true"})
+    }
+    catch(err){
+        next(err)
+    }
+})
+
+router.get('/getsubscribedteachers/:vacancyId', async(req, res, next) => {
+    try{
+        const teachers = await adminService.getAllSubscribedTeachers(req.params.vacancyId);
+        res.json(teachers)
+    }   
+    catch(err){
+        next(err);
+    }
+})
+
+router.get('/dashboarddata',async(req,res,next)=>{
+    const collegeId=req.collegeId
+    const departments = await adminService.getDashboard(collegeId);
+    
+    res.json(departments);
+
+  
+
+})
+
+// total capacity post req
+
+// 
 module.exports = router;
