@@ -32,7 +32,8 @@ const VacancySchema = new Schema({
         type:String
     },
     numberOfVacancies:{
-        type:Number
+        type:Number,
+        default: 1,
     },
     dateCreated:{
         type:Date
