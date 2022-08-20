@@ -50,7 +50,7 @@ router.post('/mysubscriptions', async(req,res,next)=>{
 
 })
 
-router.post('/delete/:id',async (req,res)=>
+router.get('/delete/:id',async (req,res)=>
 {
   try{
         const subscription=subscriptionServices.deleteById(req.params.id)

@@ -29,8 +29,8 @@ router.post('/login', async (req, res, next) => {
 })
 
 
-router.post("/createvacancy", async(req, res,next) =>{
-    vacancyServices.createVacancy(req.body)
+router.post('/createvacancy', async(req, res,next) =>{
+    vacancyService.createVacancy(req.body)
         .then(()=> {
             res.status(200).json({"status":"success"});
         })
@@ -38,6 +38,13 @@ router.post("/createvacancy", async(req, res,next) =>{
 
 })
 
+router.post('/createteacher', async (req, res, next) => {
+    const {password}  = req.body
+    const salt = bcrypt.genSaltSync(10);
+    req.body.password = bcrypt.hashSync(password, salt);
+    userServices
+        .register(req.body, res)
+})
 // router.post("/closevacancy/:id", async(req, res,next) =>{
 //     //when the position in filled
 
@@ -51,7 +58,7 @@ router.post("/createvacancy", async(req, res,next) =>{
 // })
 
 router.post('/deletevacancy/:id', async(req, res) => {
-    vacancyServices.deleteVacancyById(req.params.id);
+    vacancyService.deleteVacancyById(req.params.id);
     res.json({success:"true"});
 })
 
