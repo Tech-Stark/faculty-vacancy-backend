@@ -87,7 +87,7 @@ router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
             logger.log.trace(allUsers[i]);
             logger.log.trace(dob);
 
-            if(dob == null) continue;  
+            if (dob == null) continue;
             console.log(dob)
             console.log(masterData)
             dob.setFullYear(dob.getFullYear() + masterData.RetirementAge);
@@ -117,8 +117,8 @@ router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
     }
 })
 
-router.get('/profilebyprofileId/:profileId', async(req, res, next) =>{
-    
+router.get('/profilebyprofileId/:profileId', async (req, res, next) => {
+
     var profile = await profileService.getProfileByProfileId(req.params.profileId)
     console.log(profile)
     res.json(profile)
@@ -176,7 +176,7 @@ router.post('/markcompleted/:vacancyId', async (req, res, next) => {
 
 router.get('/getsubscribedteachers/:vacancyId', async (req, res, next) => {
     try {
-       
+
         const teachers = await adminService.getAllSubscribedTeachers(req.params.vacancyId);
         res.json(teachers)
     }
@@ -195,6 +195,10 @@ router.get('/dashboarddata', async (req, res, next) => {
 
 })
 
+router.post('/createcollege', async (req, res) => {
+    const college = await adminService.createCollege(req.body)
+    res.json(college)
+})
 // router.post('/microservice/mail', async(req, res, next) =>{
 //     var params = {}
 //     const params.to = req.to;
