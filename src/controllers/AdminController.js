@@ -202,8 +202,8 @@ router.post('/microservice/mail', async(req, res, next) =>{
         text:""
     }
 
-    params.to= req.body.to;
-    params.subject = req.body.email;
+    params.to = req.body.to;
+    params.subject = req.body.subject;
     params.text = req.body.text;
     const success = await Mailer.sendMail(params)
     res.json({success:"true"})

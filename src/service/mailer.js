@@ -15,7 +15,7 @@ let transporter = nodemailer.createTransport({
     }
 });
 
-function sendMail(params){
+async function sendMail(params){
     transporter.sendMail({
         from: "techstark123@outlook.com",
         to: params.to,
