@@ -9,9 +9,6 @@ const DepartmentSchema = new Schema({
     name:{
         type:String
     },
-    vacancies:{
-        type:Number
-    },
     capacity:{
         type:Number
     },

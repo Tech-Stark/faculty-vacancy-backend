@@ -34,9 +34,11 @@ router.post('/filter', async(req, res, next) => {
 router.post('/mysubscriptions', async(req,res,next)=>{
 
   try{
-    const user=req.user
-    const {locations,colleges,department}=req.body;
-    let subscription= await subscriptionServices.createSubscription(user,department,locations,colleges)
+    const user=req.user;
+    console.log(req.user)
+    const {colleges,department}=req.body;
+    console.log(user)
+    let subscription= await subscriptionServices.createSubscription(user,department,colleges)
     res.json(subscription)
 
   }catch(err)
@@ -48,7 +50,7 @@ router.post('/mysubscriptions', async(req,res,next)=>{
 
 })
 
-router.post('/delete/:id',async (req,res)=>
+router.get('/delete/:id',async (req,res)=>
 {
   try{
         const subscription=subscriptionServices.deleteById(req.params.id)

@@ -5,14 +5,24 @@ const { v4: uuidv4 } = require('uuid');
 
 async function createVacancy(params){
 
-    var{position,department,college}=params;
+    var{position,department,college,email, college, collegeId, location, minimumQualification, minimumExperience, compensation}=params;
     const exvacancies= await Vacancy.find({position,department,college});
-    console.log(exvacancies.length)
+    
+    // console.log(exvacancies.length)
+    const teacher = User.findOneAndUpdate({email}, {
+        exit:"exit"
+    })
     if(exvacancies.length==0)
     {
         const vacancy = new Vacancy(params);
         vacancy.vacancyId = uuidv4();
+        vacancy.collegeId = collegeId;
+        vacancy.location = location;
+        vacancy.minimumQualification = minimumQualification;
+        vacancy.minimumExperience = minimumExperience;
+        vacancy.compensation = compensation;
         vacancy.status = "open";
+        vacancy.dateCreated = Date.now();
         vacancy
             .save()
     }
@@ -22,6 +32,11 @@ async function createVacancy(params){
         console.log(vacancy)
     }
   
+}
+
+async function createTeacher(teacher){
+    //TODO: send random password to the teacher
+    const User = teacher
 }
 
 async function closeVacancyById(vacancyId)
@@ -35,6 +50,17 @@ async function closeVacancyById(vacancyId)
 async function getAll()
 {
     const vacancies = await Vacancy.find();
+    return vacancies;
+}
+
+async function getOngoingVacancies(collegeId){
+    // gets all the vacancy posting for this specific college
+    const vacancies = await Vacancy.find({collegeId, status:"ongoing"})
+    return vacancies;
+}
+
+async function getCompletedVacancies(collegeId){
+    const vacancies = await Vacancy.find({collegeId, status:"completed"})
     return vacancies;
 }
 
@@ -54,13 +80,11 @@ async function getById(user)
     {
         for(let j=0;j<vacancies.length;j++)
         {
-            if(vacancies[j].department==subscriptions[i].department&&
-                (subscriptions[i].colleges.includes(vacancies[j].college)
-                ||(subscriptions[i].locations.includes(vacancies[j].location))))
+            if(vacancies[j].department==subscriptions[i].department&&   (subscriptions[i].colleges.includes(vacancies[j].college)))
                 {
                     st.add(vacancies[j])
                 }
-        }
+        }                                       
     }
     return Array.from(st);
     
@@ -71,11 +95,21 @@ async function getVacancyById(vacancyId){
     return vacancy;
 }
 
+async function markCompleted(vacancyId){
+    const vacancy = await Vacancy.findOneAndUpdate({vacancyId}, {
+        status:"completed"
+    })
+    return vacancy;
+}
+
 module.exports = {
    getAll,
    getById,
    createVacancy,
    closeVacancyById,
    deleteVacancyById,
-   getVacancyById
+   getVacancyById,
+   getCompletedVacancies,
+   getOngoingVacancies,
+   markCompleted
   };

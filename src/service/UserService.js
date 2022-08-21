@@ -57,6 +57,11 @@ async function getAllTeachers()
     return teachers
 }
 
+async function getCollegeTeachers(collegeId){
+    const teachers = await User.find({collegeId:collegeId, exit:{$ne:"exit"}});
+    return teachers; 
+}
+
 module.exports = {
     login,
     register,
@@ -64,5 +69,6 @@ module.exports = {
     getAllUsers,
     updateUser,
     getUserByProfileId,
-    getAllTeachers
+    getAllTeachers,
+    getCollegeTeachers
 };
