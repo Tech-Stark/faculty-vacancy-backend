@@ -12,7 +12,6 @@ async function login({ email, password }) {
    
     // synchronously compare user entered password with hashed password
     if(user && bcrypt.compareSync(password, user.password)){
-        console.log("hello")
         const token = auth.generateAccessToken(email);
         // call toJSON method applied during model instantiation
         return {...user.toJSON(), token}
@@ -38,9 +37,13 @@ async function getAllUsers(){
 }
 
 async function updateUser(user){
-    const updatedUser = await User.findOneAndUpdate({email: user.email}, user);
+    const updatedUser = await User.findOneAndUpdate({email: user.email}, user,{
+        new: true
+      });
+    console.log(updatedUser)
     // logger.log.trace("Updated as the following model: ")
     // logger.log.trace(updatedUser);
+    return updatedUser;
 }
 
 async function getById(id) {
