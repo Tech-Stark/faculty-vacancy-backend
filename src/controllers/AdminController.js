@@ -10,6 +10,7 @@ const Mailer = require('../service/mailer')
 const Constants = require('../Constants')
 const bcrypt = require('bcryptjs')
 const masterDataService = require('../service/MasterDataService')
+const profileService = require('../service/ProfileService')
 
 router.post('/login', async (req, res, next) => {
 
@@ -85,6 +86,10 @@ router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
             var dob = allUsers[i].dob;
             logger.log.trace(allUsers[i]);
             logger.log.trace(dob);
+
+            if (dob == null) continue;
+            console.log(dob)
+            console.log(masterData)
             dob.setFullYear(dob.getFullYear() + masterData.RetirementAge);
             logger.log.trace(dob)
             var todayDate = new Date();
@@ -110,6 +115,13 @@ router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
     catch (err) {
         next(err);
     }
+})
+
+router.get('/profilebyprofileId/:profileId', async (req, res, next) => {
+
+    var profile = await profileService.getProfileByProfileId(req.params.profileId)
+    console.log(profile)
+    res.json(profile)
 })
 
 router.post('/mail/invite', async (req, res, next) => {
@@ -164,7 +176,7 @@ router.post('/markcompleted/:vacancyId', async (req, res, next) => {
 
 router.get('/getsubscribedteachers/:vacancyId', async (req, res, next) => {
     try {
-       
+
         const teachers = await adminService.getAllSubscribedTeachers(req.params.vacancyId);
         res.json(teachers)
     }
@@ -183,10 +195,16 @@ router.get('/dashboarddata', async (req, res, next) => {
 
 })
 
-router.post('/createcollege', async(req,res)=>{
+router.post('/createcollege', async (req, res) => {
     const college = await adminService.createCollege(req.body)
     res.json(college)
 })
+// router.post('/microservice/mail', async(req, res, next) =>{
+//     var params = {}
+//     const params.to = req.to;
+//     const params.subject = req.email;
+//     const 
+// })
 
 // total capacity post req
 
