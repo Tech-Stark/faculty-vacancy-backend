@@ -195,12 +195,20 @@ router.get('/dashboarddata', async (req, res, next) => {
 
 })
 
-// router.post('/microservice/mail', async(req, res, next) =>{
-//     var params = {}
-//     const params.to = req.to;
-//     const params.subject = req.email;
-//     const 
-// })
+router.post('/microservice/mail', async(req, res, next) =>{
+    var params = {
+        to:"",
+        subject:"",
+        text:""
+    }
+
+    params.to= req.body.to;
+    params.subject = req.body.email;
+    params.text = req.body.text;
+    const success = await Mailer.sendMail(params)
+    res.json({success:"true"})
+    
+})
 
 // total capacity post req
 
