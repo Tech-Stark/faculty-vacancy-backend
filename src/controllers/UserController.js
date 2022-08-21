@@ -31,22 +31,39 @@ router.post('/login', (req, res, next) => {
 /*
 Gets profile by authorization token. 
 */
-router.get('/profile', (req, res, next) => {
+router.get('/profile', async (req, res, next) => {
     logger.log.info("profile requested for user "+ req.user.data);
-    profileServices.getProfile(req.user.data).then(
-        (profile) =>{ 
-            res.json(profile);
-        }
-    ).catch(err => next(err))
+    try{
+        const {user,profile} = await profileServices.getProfile(req.user.data)
+
+     
+        res.json({user,profile})
+           
+    }
+    catch(err){
+        next(err)
+    }
 })
 
 // router.get('/getallteachers', async (req, res, next) => {
 
 // })
 
-router.post('/update-profile', (req, res, next) => {
+router.post('/updateprofile',async  (req, res, next) => {
     logger.log.info("profile updated for user "+ req.user.data);
-    profileServices.updateProfile(req.user.data, req.body, res)
+    
+    try{
+        const user = req.body.user
+        const profile = req.body.profile
+        const updatedUser = await userServices.updateUser(user);
+        const updatedProfile = await profileServices.updateProfile(profile, user, res)
+        res.json({updatedUser, updatedProfile})
+    }
+    catch(err){
+        next(err);
+    }
+    
+
 })
 
 router.get('/:id', (req, res, next) => {
