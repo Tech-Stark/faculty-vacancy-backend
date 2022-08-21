@@ -9,9 +9,10 @@ const logger = require('../logging/logger');
 
 async function login({ email, password }) {
     const user = await User.findOne({email});
-
+   
     // synchronously compare user entered password with hashed password
     if(user && bcrypt.compareSync(password, user.password)){
+        console.log("hello")
         const token = auth.generateAccessToken(email);
         // call toJSON method applied during model instantiation
         return {...user.toJSON(), token}
