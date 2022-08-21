@@ -183,6 +183,11 @@ router.get('/dashboarddata', async (req, res, next) => {
 
 })
 
+router.post('/createcollege', async(req,res)=>{
+    const college = await adminService.createCollege(req.body)
+    res.json(college)
+})
+
 // total capacity post req
 
 // 
