@@ -17,7 +17,8 @@ async function getAllSubscribedTeachers(vacancyId){
     //
     const teachers = await User.find();
 
-    const vacancy= await Vacancy.find({vacancyId});
+    const vacancy= await Vacancy.findOne({vacancyId});
+    console.log(vacancy)
     const department=vacancy.department;
     const college=vacancy.college;
     const location =vacancy.location;
@@ -26,7 +27,7 @@ async function getAllSubscribedTeachers(vacancyId){
 
     for(let i=0;i<teachers.length;i++)
     {
-        const subscription= await Subscription.find({$or:[{profileId:User.profileId,department,college},{profileId:User.profileId,department,location}]});
+        const subscription= await Subscription.find({$or:[{profileId:teachers[i].profileId,department,college},{profileId:teachers[i].profileId,department,location}]});
         if(subscription.length>0){
             subscribedTeachers.push(teachers[i]);
         }
