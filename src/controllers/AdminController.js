@@ -85,6 +85,10 @@ router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
             var dob = allUsers[i].dob;
             logger.log.trace(allUsers[i]);
             logger.log.trace(dob);
+            
+            if(dob == null) continue;  
+            console.log(dob)
+            console.log(masterData)
             dob.setFullYear(dob.getFullYear() + masterData.RetirementAge);
             logger.log.trace(dob)
             var todayDate = new Date();
