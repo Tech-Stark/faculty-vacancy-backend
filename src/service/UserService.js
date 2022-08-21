@@ -29,7 +29,7 @@ function register(params, res){
             res.json({success:true});
         } )
         .catch((err) => {
-            res.status(400).json({success:false, msg: "A user already exists with the same email"});
+            res.status(400).json({success:false, msg:err});
         });
 }
 async function getAllUsers(){

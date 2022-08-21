@@ -58,7 +58,7 @@ router.post('/createteacher', async (req, res, next) => {
 
 // })
 
-router.post('/deletevacancy/:id', async(req, res) => {
+router.get('/deletevacancy/:id', async(req, res) => {
     vacancyService.deleteVacancyById(req.params.id);
     res.json({success:"true"});
 })
