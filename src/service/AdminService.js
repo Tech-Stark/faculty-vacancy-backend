@@ -4,6 +4,7 @@ const logger = require('../logging/logger.js')
 const Subscription= require('../models/SubscriptionModel');
 const Vacancy = require('../models/VacancyModel');
 const Department=require('../models/DepartmentModel');
+const College =require('../models/CollegeModel')
 
 function getAllAdminData() {
     return AdminData.find()
@@ -61,9 +62,16 @@ async function getDashboard(collegeId){
     return departments;
 }
 
+async function createCollege(params)
+{
+    const college = await College.insertMany(params)
+    return college
+}
+
 
 module.exports = {
     getAllAdminData,
     getAllSubscribedTeachers,
-    getDashboard
+    getDashboard,
+    createCollege
 };
