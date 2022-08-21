@@ -23,7 +23,7 @@ const UserSchema = new Schema({
     position:{
         type:String
     },
-    departent:{
+    department:{
         type:String
     },
     profileId: {
