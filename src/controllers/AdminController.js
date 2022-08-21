@@ -10,6 +10,7 @@ const Mailer = require('../service/mailer')
 const Constants = require('../Constants')
 const bcrypt = require('bcryptjs')
 const masterDataService = require('../service/MasterDataService')
+const profileService = require('../service/ProfileService')
 
 router.post('/login', async (req, res, next) => {
 
@@ -85,7 +86,7 @@ router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
             var dob = allUsers[i].dob;
             logger.log.trace(allUsers[i]);
             logger.log.trace(dob);
-            
+
             if(dob == null) continue;  
             console.log(dob)
             console.log(masterData)
@@ -114,6 +115,12 @@ router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
     catch (err) {
         next(err);
     }
+})
+
+router.get('/profilebyprofileId/:profileId', async(req, res, next) =>{
+    
+    var profile = profileService.getProfileByProfileId(req.params.profileId)
+    res.json(profile)
 })
 
 router.post('/mail/invite', async (req, res, next) => {

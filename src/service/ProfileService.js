@@ -31,7 +31,14 @@ function getProfile(email) {
         })
 }
 
+function getProfileByProfileId(profileId) {
+
+    const profile =  Profile.findOne({profileId})
+    return profile;
+}
+
 module.exports = {
     updateProfile,
-    getProfile
+    getProfile,
+    getProfileByProfileId
 };
