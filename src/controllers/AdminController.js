@@ -12,6 +12,7 @@ const bcrypt = require('bcryptjs')
 
 
 router.post('/login', async (req, res, next) => {
+    
     const { email, password} = req.body;
     try{
         const user = await userServices.login({email, password})

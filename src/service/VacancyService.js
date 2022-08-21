@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 
 async function createVacancy(params){
 
-    var{position,department,college,email, college, collegeId, location, minimumQualification, minimumExperience, compensation}=params;
+    var{position,department,college,email,collegeId, location, minimumQualification, minimumExperience, compensation}=params;
     const exvacancies= await Vacancy.find({position,department,college});
     
     // console.log(exvacancies.length)
