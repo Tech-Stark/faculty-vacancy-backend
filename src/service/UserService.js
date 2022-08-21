@@ -37,9 +37,13 @@ async function getAllUsers(){
 }
 
 async function updateUser(user){
-    const updatedUser = await User.findOneAndUpdate({email: user.email}, user);
+    const updatedUser = await User.findOneAndUpdate({email: user.email}, user,{
+        new: true
+      });
+    console.log(updatedUser)
     // logger.log.trace("Updated as the following model: ")
     // logger.log.trace(updatedUser);
+    return updatedUser;
 }
 
 async function getById(id) {

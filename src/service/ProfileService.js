@@ -3,38 +3,34 @@ const Profile = require('../models/ProfileModel')
 const logger = require('../logging/logger.js')
 
 
-function updateProfile(email, profile, res) {
-    User.findOne({email: email})
-        .then((curUser) => {
-            console.log(curUser);
-            profile.profileId = curUser.profileId;
-            console.log(profile)
-            return Profile.findOneAndUpdate({profileId: curUser.profileId}, profile);            
-        })
-        .then(()=>{
-            res.json({success:true});
-        })
-        .catch(() =>{
-            res.status(400).json({success:false, msg: "Profile Update Unsuccessful"})
-        });
+async function updateProfile(email, profile, res) {
+   
+    const updatedProfile = await Profile.findOneAndUpdate({profileId:profile.profileId}, profile,{
+        new: true
+      });
+    console.log(updatedProfile)
+    return updatedProfile;
+    
 }
 
 
 
-function getProfile(email) {
+async function getProfile(email) {
 
-    return User.findOne({email: email})
-        .then((user) =>{
-            logger.log.info("profile requested for user "+ user.profileId);
-            return Profile.findOne({profileId: user.profileId})
-                       
-        })
+    const user = await User.findOne({email: email});
+    logger.log.info("profile requested for user "+ user.profileId);
+    const profile = await Profile.findOne({profileId: user.profileId})
+    
+    return {user ,profile};
 }
 
-function getProfileByProfileId(profileId) {
+async function getProfileByProfileId(profileId) {
 
-    const profile =  Profile.findOne({profileId})
-    return profile;
+    const profile =  await Profile.findOne({profileId})
+    const user= await User.findOne({profileId});
+    console.log({user,profile})
+    return {user,profile};
+   
 }
 
 module.exports = {

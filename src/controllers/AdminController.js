@@ -119,7 +119,8 @@ router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
 
 router.get('/profilebyprofileId/:profileId', async(req, res, next) =>{
     
-    var profile = profileService.getProfileByProfileId(req.params.profileId)
+    var profile = await profileService.getProfileByProfileId(req.params.profileId)
+    console.log(profile)
     res.json(profile)
 })
 
@@ -193,6 +194,13 @@ router.get('/dashboarddata', async (req, res, next) => {
 
 
 })
+
+// router.post('/microservice/mail', async(req, res, next) =>{
+//     var params = {}
+//     const params.to = req.to;
+//     const params.subject = req.email;
+//     const 
+// })
 
 // total capacity post req
 
