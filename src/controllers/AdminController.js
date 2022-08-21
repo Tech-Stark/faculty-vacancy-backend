@@ -8,6 +8,7 @@ const Admin = require('../models/AdminModel');
 const User = require('../models/UserModel.js');
 const Mailer = require('../service/mailer')
 const Constants = require('../Constants')
+const bcrypt = require('bcryptjs')
 
 
 router.post('/login', async (req, res, next) => {
