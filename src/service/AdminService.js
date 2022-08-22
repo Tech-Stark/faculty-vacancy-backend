@@ -42,14 +42,15 @@ async function getDashboard(collegeId){
     const vacancies=await Vacancy.find({collegeId});//vacancy count
     const teachers=await User.find({collegeId})//teachers count
     const deps=[]
+    console.log(vacancies)
     for(let i = 0; i < departments.length; i++){
         var vacCount = 0, teacherCount = 0;
-        for(let j = 0; j < vacancies; j++){
+        for(let j = 0; j < vacancies.length; j++){
             if(departments[i].name== vacancies[j].department){
                 vacCount++;
             }
         }
-        for(let j = 0; j < teachers; j++){
+        for(let j = 0; j < teachers.length; j++){
             if(departments[i].name == teachers[j].department){
                 teacherCount++;
             }
