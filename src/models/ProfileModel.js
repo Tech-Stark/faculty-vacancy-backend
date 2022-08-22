@@ -16,9 +16,6 @@ const ProfileSchema = new Schema({
     addressId: {
         type: String,
     },
-    phoneNumber: {
-        type: String,
-    },
 });
 
 ProfileSchema.set('toJSON', {
