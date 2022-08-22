@@ -38,11 +38,10 @@ async function getAllSubscribedTeachers(vacancyId){
 }
 
 async function getDashboard(collegeId){
-    const departments=Department.find({collegeId})//capacity
-    const vacancies=Vacancy.find({collegeId});//vacancy count
-    const teachers=User.find({collegeId})//teachers count
-
-
+    const departments=await Department.find({collegeId})//capacity
+    const vacancies=await Vacancy.find({collegeId});//vacancy count
+    const teachers=await User.find({collegeId})//teachers count
+    const deps=[]
     for(let i = 0; i < departments.length; i++){
         var vacCount = 0, teacherCount = 0;
         for(let j = 0; j < vacancies; j++){
@@ -55,11 +54,12 @@ async function getDashboard(collegeId){
                 teacherCount++;
             }
         }
-        departments[i].vacancyCount = vacCount;
-        departments[i].teacherCount = teacherCount;
-
+        var newdep={...departments[i]._doc}
+        newdep.vacancyCount = vacCount;
+        newdep.teacherCount = teacherCount;
+        deps.push(newdep)
     }
-    return departments;
+    return deps;
 }
 
 async function createCollege(params)
