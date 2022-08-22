@@ -11,7 +11,7 @@ const DepartmentSchema = new Schema({
     },
     capacity:{
         type:Number
-    },
+    }
 
 });
 
