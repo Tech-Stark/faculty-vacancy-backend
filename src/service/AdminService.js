@@ -73,7 +73,6 @@ async function getMyCollegeData(collegeId)
 {
     const college=await College.findOne({collegeId});
     const departments= await Department.find({collegeId});
-
     var newcollege;
 
     newcollege={"collegeId":collegeId,"collegeName":college.name,"departments":departments};
