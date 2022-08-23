@@ -72,7 +72,7 @@ async function createCollege(params)
 
 async function getMyCollege(collegeId)
 {
-    const college=await College.find({collegeId});
+    const college=await College.findOne({collegeId});
 
     var newcollege;
 
