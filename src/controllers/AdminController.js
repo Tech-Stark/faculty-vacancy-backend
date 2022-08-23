@@ -196,42 +196,35 @@ router.get('/dashboarddata', async (req, res, next) => {
 
 })
 
-router.post('/microservice/mail', async(req, res, next) =>{
+router.post('/microservice/mail', async (req, res, next) => {
     var params = {
-        to:"",
-        subject:"",
-        text:""
+        to: "",
+        subject: "",
+        text: ""
     }
 
     params.to = req.body.to;
     params.subject = req.body.subject;
     params.text = req.body.text;
     const success = await Mailer.sendMail(params)
-    res.json({success:"true"})
-    
+    res.json({ success: "true" })
+
 })
 router.post('/createcollege', async (req, res) => {
     const college = await adminService.createCollege(req.body)
     res.json(college)
 })
 
-router.get('/getmycollege',async(req,res)=>{
-    const collegeId=req.collegeId;
+router.get('/getmycollegedata', async (req, res) => {
+    const collegeId = req.collegeId;
 
-    const newcollege=await adminService.getMyCollege(collegeId)
-   
+    const newcollege = await adminService.getMyCollegeData(collegeId)
+
 
     res.json(newcollege)
 
 })
 
-router.get('/getdepartments',async(req,res)=>{
-    const collegeId=req.collegeId;
-
-    const departments=await adminService.getDepartments(collegeId)
-
-    res.json(departments)
-})
 
 // total capacity post req
 
