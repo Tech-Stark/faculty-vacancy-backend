@@ -53,7 +53,7 @@ router.post('/updateprofile',async  (req, res, next) => {
     logger.log.info("profile updated for user "+ req.user.data);
     
     try{
-        const user = req.body.user
+        const user = req.body.values
         const profile = req.body.profile
         const updatedUser = await userServices.updateUser(user);
         const updatedProfile = await profileServices.updateProfile(profile, user, res)
