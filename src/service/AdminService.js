@@ -5,6 +5,7 @@ const Subscription= require('../models/SubscriptionModel');
 const Vacancy = require('../models/VacancyModel');
 const Department=require('../models/DepartmentModel');
 const College =require('../models/CollegeModel')
+const Department=require('../models/DepartmentModel')
 
 function getAllAdminData() {
     return AdminData.find()
@@ -69,10 +70,30 @@ async function createCollege(params)
     return college
 }
 
+async function getMyCollege(collegeId)
+{
+    const college=await College.find({collegeId});
+
+    var newcollege;
+
+    newcollege={"collegeId":collegeId,"collegeName":college.name};
+
+    return newcollege
+}
+
+async function getDepartments(collegeId)
+{
+    const departments= await Department.find({collegeId});
+
+    return departments;
+}
+
 
 module.exports = {
     getAllAdminData,
     getAllSubscribedTeachers,
     getDashboard,
-    createCollege
+    createCollege,
+    getMyCollege,
+    getDepartments
 };

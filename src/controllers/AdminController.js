@@ -10,7 +10,8 @@ const Mailer = require('../service/mailer')
 const Constants = require('../Constants')
 const bcrypt = require('bcryptjs')
 const masterDataService = require('../service/MasterDataService')
-const profileService = require('../service/ProfileService')
+const profileService = require('../service/ProfileService');
+const College = require('../models/CollegeModel.js');
 
 router.post('/login', async (req, res, next) => {
 
@@ -205,6 +206,24 @@ router.post('/createcollege', async (req, res) => {
 //     const params.subject = req.email;
 //     const 
 // })
+
+router.get('/getmycollege',async(req,res)=>{
+    const collegeId=req.collegeId;
+
+    const newcollege=await adminService.getMyCollege(collegeId)
+   
+
+    res.json(newcollege)
+
+})
+
+router.get('/getdepartments',async(req,res)=>{
+    const collegeId=req.collegeId;
+
+    const departments=await adminService.getDepartments(collegeId)
+
+    res.json(departments)
+})
 
 // total capacity post req
 
