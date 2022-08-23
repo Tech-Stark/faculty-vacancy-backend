@@ -5,7 +5,6 @@ const Subscription= require('../models/SubscriptionModel');
 const Vacancy = require('../models/VacancyModel');
 const Department=require('../models/DepartmentModel');
 const College =require('../models/CollegeModel')
-const Department=require('../models/DepartmentModel')
 
 function getAllAdminData() {
     return AdminData.find()
