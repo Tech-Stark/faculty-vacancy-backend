@@ -39,6 +39,9 @@ const UserSchema = new Schema({
     isOpenToWork: {
         type: Boolean,
     },
+    phoneNumber: {
+        type: String,
+    },
     dateJoined: {
         type: Date,
         default: Date.now(),
