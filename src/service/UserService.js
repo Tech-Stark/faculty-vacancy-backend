@@ -1,4 +1,5 @@
 const User = require('../models/UserModel')
+const Admin=require('../models/AdminModel')
 const Profile = require('../models/ProfileModel')
 const bcrypt = require('bcryptjs');
 const auth = require('../helpers/jwt.js')
@@ -9,12 +10,20 @@ const logger = require('../logging/logger');
 
 async function login({ email, password }) {
     const user = await User.findOne({email});
-   
+    const admin = await Admin.findOne({email});
+    var isAdmin;
+    if(admin)
+    {
+        isAdmin=true;
+    }
+    else{
+        isAdmin=false;
+    }
     // synchronously compare user entered password with hashed password
     if(user && bcrypt.compareSync(password, user.password)){
         const token = auth.generateAccessToken(email);
         // call toJSON method applied during model instantiation
-        return {...user.toJSON(), token}
+        return {...user.toJSON(), token,"isAdmin":isAdmin}
     }
 }
 
