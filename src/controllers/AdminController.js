@@ -22,13 +22,14 @@ router.post('/login', async (req, res, next) => {
         var isAdmin;
         var isSuperAdmin;
         const admin=status
+
         if(admin)
         {
             
             if(admin.role=="superadmin")
             {
                 isSuperAdmin=true;
-                isAdmin=true;
+                isAdmin=false;
             }
             else
             {
