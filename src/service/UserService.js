@@ -12,9 +12,18 @@ async function login({ email, password }) {
     const user = await User.findOne({email});
     const admin = await Admin.findOne({email});
     var isAdmin;
+    var isSuperAdmin=false;
     if(admin)
     {
-        isAdmin=true;
+        if(admin.role=="superadmin")
+        {
+            isSuperAdmin=true;
+        }
+        else
+        {
+            isAdmin=true;
+        }
+        
     }
     else{
         isAdmin=false;
@@ -23,7 +32,7 @@ async function login({ email, password }) {
     if(user && bcrypt.compareSync(password, user.password)){
         const token = auth.generateAccessToken(email);
         // call toJSON method applied during model instantiation
-        return {...user.toJSON(), token,"isAdmin":isAdmin}
+        return {...user.toJSON(), token,"isAdmin":isAdmin,"isSuperAdmin":isSuperAdmin}
     }
 }
 
