@@ -11,14 +11,14 @@ let transporter = nodemailer.createTransport({
        ciphers:'SSLv3'
     },
     auth: {
-        user: 'techstark123@outlook.com',
+        user: 'techstark942@outlook.com',
         pass: 'password@techStark'
     }
 });
 
 async function sendMail(params){
     transporter.sendMail({
-        from: "techstark123@outlook.com",
+        from: "techstark942@outlook.com",
         to: params.to,
         // cc: newMail.cc,
         // bcc: newMail.bcc,

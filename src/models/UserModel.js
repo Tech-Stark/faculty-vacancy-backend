@@ -49,6 +49,9 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now(),
     },
+    daysToRetire:{
+        type: String,
+    },
     exit: {
         type: String,
         default: "none"
