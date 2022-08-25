@@ -102,16 +102,21 @@ router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
             logger.log.trace(masterData);
             var allUsers = await userServices.getCollegeTeachers(req.collegeId)
             logger.log.trace(allUsers)
+            var tmp = [];
             for (let i = 0; i < allUsers.length; i++) {
-                var dob = allUsers[i].dob;
+                const dob = allUsers[i].dob;
                 logger.log.trace(allUsers[i]);
                 logger.log.trace(dob);
     
                 if (dob == null) continue;
                 console.log(dob)
                 console.log(masterData)
+                console.log(allUsers[i])
                 dob.setFullYear(dob.getFullYear() + masterData.RetirementAge);
+                console.log(allUsers[i])
+                
                 logger.log.trace(dob)
+                logger.log.trace()
                 var todayDate = new Date();
                 const days = (dob, todayDate) => {
                     let difference = dob.getTime() - todayDate.getTime();
@@ -120,11 +125,13 @@ router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
                 }
                 var diffDays = days(dob, todayDate);
                 logger.log.trace(diffDays + " days to retirement");
-                var tmp = [];
                 var noOfDays = req.params.noOfDays
                 console.log(diffDays);
                 console.log(noOfDays)
                 if (diffDays <= noOfDays && (allUsers[i].exit == "none" || allUsers[i].exit == "pending")) {
+                    // adjusting for dob
+                    dob.setFullYear(dob.getFullYear() - masterData.RetirementAge); 
+                    
                     allUsers[i].exit = "pending";
                     tmp.push(allUsers[i]);
                 }
