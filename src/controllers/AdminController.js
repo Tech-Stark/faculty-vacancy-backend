@@ -160,19 +160,24 @@ router.post('/mail/invite', async (req, res, next) => {
         const { vacancyId, profileIdList } = req.body;
         // send the url to all the profile email ids 
         vacancy = await vacancyService.getVacancyById(vacancyId);
-        var mailingList = []
-        for (let i = 0; i < profileIdList.length; i++) {
-            var user = await userServices.getUserByProfileId(profileIdList[i]);
-            mailingList.push(user.email);
-        }
-        for (let i = 0; i < mailingList.length; i++) {
-            var params = {}
-            params.to = mailingList[i];
-            params.subject = Constants.MAIL_INVITE_SUBJECT
-            params.text = Constants.MAIL_INVITE_TEXT + 'at ' + (vacancy.url != null ? vacancy.url : '');
-            Mailer.sendMail(params)
+        if(vacancy){
+
+            var mailingList = []
+            for (let i = 0; i < profileIdList.length; i++) {
+                var user = await userServices.getUserByProfileId(profileIdList[i]);
+                mailingList.push(user.email);
+            }
+            for (let i = 0; i < mailingList.length; i++) {
+                var params = {}
+                params.to = mailingList[i];
+                params.subject = Constants.MAIL_INVITE_SUBJECT
+                params.text = Constants.MAIL_INVITE_TEXT + 'at ' + (vacancy.url != null ? vacancy.url : '');
+                const sent = await Mailer.sendMail(params)
+                
+            }
         }
     }
+    res.json({success:"True"})
 
 })
 
