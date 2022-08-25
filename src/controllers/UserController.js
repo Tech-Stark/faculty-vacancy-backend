@@ -11,8 +11,14 @@ router.post('/register', (req, res, next) => {
     const {password} = req.body
     const salt = bcrypt.genSaltSync(10);
     req.body.password = bcrypt.hashSync(password, salt);
-    userServices
-        .register(req.body, res)
+    try{
+        userServices
+            .register(req.body)
+        res.json({success:true});
+    }
+    catch(err){
+        res.status(400).json({success:false, msg:err});
+    }
 })
 
 router.post('/login', (req, res, next) => {

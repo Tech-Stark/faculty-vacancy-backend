@@ -162,7 +162,7 @@ router.post('/mail/invite', async (req, res, next) => {
         vacancy = await vacancyService.getVacancyById(vacancyId);
         var mailingList = []
         for (let i = 0; i < profileIdList.length; i++) {
-            var user = await User.getUserByProfileId(profileIdList[i]);
+            var user = await userServices.getUserByProfileId(profileIdList[i]);
             mailingList.add(user.email);
         }
         for (let i = 0; i < mailingList.length; i++) {
