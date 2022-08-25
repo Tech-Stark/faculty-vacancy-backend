@@ -19,9 +19,31 @@ router.post('/login', async (req, res, next) => {
     try {
         const user = await userServices.login({ email, password })
         const status = await Admin.findOne({ email: email })
+        var isAdmin;
+        var isSuperAdmin;
+        const admin=status
+        if(admin)
+        {
+            
+            if(admin.role=="superadmin")
+            {
+                isSuperAdmin=true;
+                isAdmin=true;
+            }
+            else
+            {
+                isAdmin=true;
+                isSuperAdmin=false;
+            }
+            
+        }
+        else{
+            isAdmin=false;
+            isSuperAdmin=false;
+        }
         if (user && status != null) {
             // User.findOneAndUpdate({email: email}, user);         
-            res.status(200).json(user);
+            res.status(200).json({...user,"isAdmin":isAdmin,"isSuperAdmin":isSuperAdmin});
         }
         else {
             res.json({ error: 'Email or password is incorrect' });

@@ -19,6 +19,7 @@ async function login({ email, password }) {
         if(admin.role=="superadmin")
         {
             isSuperAdmin=true;
+            isAdmin=true;
         }
         else
         {
@@ -81,7 +82,12 @@ async function getUserByProfileId(profileId){
 async function getAllTeachers()
 {
     const teachers=await User.find({exit:"none"});
-    return teachers
+    const newteachers=teachers.filter(checknotadmin)
+    function checknotadmin(teacher)
+    {
+        return (teacher.email!="admin@nitdgp.com"&&teacher.email!="superadmin@aicte.com")
+    }
+    return newteachers
 }
 
 async function getCollegeTeachers(collegeId){
