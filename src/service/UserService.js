@@ -81,13 +81,13 @@ async function getUserByProfileId(profileId){
 }
 async function getAllTeachers()
 {
-    const teachers=await User.find({exit:"none"});
-    const newteachers=teachers.filter(checknotadmin)
-    function checknotadmin(teacher)
+    const newteachers=await User.find({exit:"none"});
+    const teachers=newteachers.filter(checknotadmin)
+    function checknotadmin(newteacher)
     {
-        return (teacher.email!="admin@nitdgp.com"&&teacher.email!="superadmin@aicte.com")
+        return (newteacher.email!="admin@nitdgp.com"&&newteacher.email!="superadmin@aicte.com")
     }
-    return newteachers
+    return teachers
 }
 
 async function getCollegeTeachers(collegeId){

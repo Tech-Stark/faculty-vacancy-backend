@@ -16,7 +16,12 @@ function getAllAdminData() {
 
 async function getAllSubscribedTeachers(vacancyId){
     //
-    const teachers = await User.find();
+    const newteachers=await User.find({exit:"none"});
+    const teachers=newteachers.filter(checknotadmin)
+    function checknotadmin(newteacher)
+    {
+        return (newteacher.email!="admin@nitdgp.com"&&newteacher.email!="superadmin@aicte.com")
+    }
 
     const vacancy= await Vacancy.findOne({vacancyId});
     console.log(vacancy)
@@ -40,7 +45,12 @@ async function getAllSubscribedTeachers(vacancyId){
 async function getDashboard(collegeId){
     const departments=await Department.find({collegeId})//capacity
     const vacancies=await Vacancy.find({collegeId});//vacancy count
-    const teachers=await User.find({collegeId})//teachers count
+    const newteachers=await User.find({collegeId});
+    const teachers=newteachers.filter(checknotadmin)
+    function checknotadmin(newteacher)
+    {
+        return (newteacher.email!="admin@nitdgp.com"&&newteacher.email!="superadmin@aicte.com")
+    }
     const deps=[]
     console.log(vacancies)
     for(let i = 0; i < departments.length; i++){
