@@ -133,6 +133,7 @@ router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
                     dob.setFullYear(dob.getFullYear() - masterData.RetirementAge); 
                     
                     allUsers[i].exit = "pending";
+                    allUsers[i].daysToRetire = diffDays;
                     tmp.push(allUsers[i]);
                 }
     
