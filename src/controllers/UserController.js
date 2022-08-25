@@ -57,10 +57,10 @@ router.get('/profile', async (req, res, next) => {
 
 router.post('/updateprofile',async  (req, res, next) => {
     logger.log.info("profile updated for user "+ req.user.data);
-    
     try{
-        const user = req.body.values
+        const user = req.body.user
         const profile = req.body.profile
+        console.log(user)
         const updatedUser = await userServices.updateUser(user);
         const updatedProfile = await profileServices.updateProfile(profile, user, res)
         res.json({updatedUser, updatedProfile})
