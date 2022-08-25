@@ -163,7 +163,7 @@ router.post('/mail/invite', async (req, res, next) => {
         var mailingList = []
         for (let i = 0; i < profileIdList.length; i++) {
             var user = await userServices.getUserByProfileId(profileIdList[i]);
-            mailingList.add(user.email);
+            mailingList.push(user.email);
         }
         for (let i = 0; i < mailingList.length; i++) {
             var params = {}
