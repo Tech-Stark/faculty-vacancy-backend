@@ -66,8 +66,6 @@ async function getCollegeTeachers(collegeId){
     return teachers; 
 }
 
-<<<<<<< Updated upstream
-=======
 async function changePassword(){
     const users = await User.find();
     for(let i = 0; i < users.length; i++){
@@ -116,7 +114,6 @@ async function modLocations(){
     }
 }
 
->>>>>>> Stashed changes
 module.exports = {
     login,
     register,
@@ -125,12 +122,8 @@ module.exports = {
     updateUser,
     getUserByProfileId,
     getAllTeachers,
-<<<<<<< Updated upstream
-    getCollegeTeachers
-=======
     getCollegeTeachers,
     changePassword,
     fillUsers,
     modLocations
->>>>>>> Stashed changes
 };

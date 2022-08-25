@@ -38,6 +38,10 @@ const VacancySchema = new Schema({
     dateCreated:{
         type:Date
     },
+    applyLink:{
+        type:String,
+        default: "google.com"
+    },
     status:{
         type: String,
         default:"open"
