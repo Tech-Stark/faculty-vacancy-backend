@@ -89,7 +89,7 @@ async function fillUsers(){
         const user = User({
             "email": email,
             "password": password,
-            "dob":'196' + (3 + i%3).toString() +  '-0'+ (i%10)+'-01',
+            "dob":'196' + (3 + i%3).toString() +  '-0'+ (i%9 + 1)+'-01',
             "isOpenToWork": true,
             "firstName": 'Ramyanil' + i,
             "lastName": 'Raha',
