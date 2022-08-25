@@ -55,7 +55,7 @@ async function getAll()
 
 async function getOngoingVacancies(collegeId){
     // gets all the vacancy posting for this specific college
-    const vacancies = await Vacancy.find({collegeId, status:"ongoing"})
+    const vacancies = await Vacancy.find({collegeId, status:"open"})
     return vacancies;
 }
 
