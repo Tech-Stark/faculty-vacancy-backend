@@ -18,6 +18,9 @@ const AdminSchema = new Schema({
     },
     collegeId: {
         type: String, //collegeId
+    },
+    collegeName:{
+        type:String
     }
 });
 
