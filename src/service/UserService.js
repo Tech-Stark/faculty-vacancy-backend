@@ -12,9 +12,10 @@ async function login({ email, password }) {
     const user = await User.findOne({email});
     const admin = await Admin.findOne({email});
     var isAdmin;
-    var isSuperAdmin=false;
+    var isSuperAdmin;
     if(admin)
     {
+        
         if(admin.role=="superadmin")
         {
             isSuperAdmin=true;
@@ -22,12 +23,16 @@ async function login({ email, password }) {
         else
         {
             isAdmin=true;
+            isSuperAdmin=false;
         }
         
     }
     else{
         isAdmin=false;
+        isSuperAdmin=false;
     }
+    console.log(isSuperAdmin)
+    
     // synchronously compare user entered password with hashed password
     if(user && bcrypt.compareSync(password, user.password)){
         const token = auth.generateAccessToken(email);

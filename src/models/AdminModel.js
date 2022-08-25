@@ -13,7 +13,7 @@ const AdminSchema = new Schema({
     lastName: {
         type: String,
     },
-    adminRole: {
+    role: {
         type: String,
     },
     collegeId: {
