@@ -61,6 +61,8 @@ const db = mongoose.connection;
 db.on('error', () => logger.log.error('connection error:'));
 db.once('open', () => logger.log.info(`Connected to mongo at ${uri}`));
 
+// userDataService.fillUsers();
+// userDataService.modLocations();
 cron.schedule('0 1 * * * *', async () => {
     logger.log.info('running vacancy finder at every day at 1AM');
     // def()

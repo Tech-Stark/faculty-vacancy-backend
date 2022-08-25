@@ -34,7 +34,10 @@ const UserSchema = new Schema({
         type: String,
     },
     collegeName:{
-        type:String
+        type:String,
+    },
+    location:{
+        type:String,
     },
     isOpenToWork: {
         type: Boolean,
