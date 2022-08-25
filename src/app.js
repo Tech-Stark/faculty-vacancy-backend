@@ -18,6 +18,7 @@ const Subscription = require('./models/SubscriptionModel.js');
 const masterDataService = require('./service/MasterDataService');
 const userDataService = require('./service/UserService');
 const adminDataService = require('./service/AdminService');
+const superadmin=require('./controllers/SuperAdminController')
 const { date } = require('@hapi/joi/lib/template.js');
 const Mailer = require('./service/mailer')
 const Constants = require('./Constants')
@@ -52,6 +53,7 @@ app.use('/users', users) // middleware for listening to routes
 app.use('/subscriptions', subscriptions) 
 app.use('/vacancies', vacancies) 
 app.use('/admin', admin)
+app.use('/superadmin',superadmin)
 app.use(errors.errorHandler); // middleware for error responses
 
 // MongoDB connection, success and error event responses

@@ -81,7 +81,7 @@ async function getById(user)
     {
         for(let j=0;j<vacancies.length;j++)
         {
-            if(vacancies[j].department==subscriptions[i].department&&   (subscriptions[i].colleges.includes(vacancies[j].college)))
+            if(vacancies[j].department==subscriptions[i].department && (subscriptions[i].colleges.includes(vacancies[j].college)))
                 {
                     st.add(vacancies[j])
                 }
