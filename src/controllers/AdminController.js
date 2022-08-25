@@ -167,7 +167,7 @@ router.post('/mail/invite', async (req, res, next) => {
 
         const { vacancyId, profileIdList } = req.body;
         // send the url to all the profile email ids 
-        vacancy = await vacancyService.getVacancyById(vacancyId);
+        const vacancy = await vacancyService.getVacancyById(vacancyId);
         if(vacancy){
 
             var mailingList = []
