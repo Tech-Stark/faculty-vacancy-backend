@@ -6,12 +6,13 @@ const { v4: uuidv4 } = require('uuid');
 async function createVacancy(params){
 
     var{position,department,college,email,collegeId, location, minimumQualification, minimumExperience, compensation}=params;
-    const exvacancies= await Vacancy.find({position,department,college});
+    const exvacancies= await Vacancy.find({position,department,college,minimumQualification, minimumExperience, compensation});
     
     // console.log(exvacancies.length)
-    const teacher = User.findOneAndUpdate({email}, {
+    const teacher = await User.findOneAndUpdate({email}, {
         exit:"exit"
     })
+    console.log(exvacancies)
     if(exvacancies.length==0)
     {
         const vacancy = new Vacancy(params);
