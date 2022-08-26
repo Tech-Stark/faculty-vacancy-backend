@@ -74,10 +74,10 @@ async function getDashboard(collegeId){
             }
         }
         var newdep={...departments[i]._doc}
-        var rand =Math.floor(Math.random() * 3);
+
         var depcount=departments[i].capacity
-        newdep.vacancyCount = rand;
-        newdep.teacherCount = depcount-rand;
+        newdep.vacancyCount = vacCount;
+        newdep.teacherCount = depcount-vacCount;
         deps.push(newdep)
     }
     return deps;

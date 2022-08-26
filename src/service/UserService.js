@@ -101,6 +101,7 @@ async function getAllTeachersX()
 }
 
 async function getCollegeTeachers(collegeId){ 
+    console.log(collegeId)
     const newteachers=await User.find({collegeId:collegeId, exit:{$ne:"exit"}});
     const teachers=newteachers.filter(checknotadmin)
     function checknotadmin(newteacher)

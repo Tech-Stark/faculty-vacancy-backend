@@ -138,9 +138,8 @@ router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
     else{
         try {
             var masterData = await masterDataService.getMasterData()
-            logger.log.trace(masterData);
             var allUsers = await userServices.getCollegeTeachers(req.collegeId)
-            logger.log.trace(allUsers)
+            console.log(allUsers);
             var tmp = [];
             for (let i = 0; i < allUsers.length; i++) {
                 const dob = allUsers[i].dob;
