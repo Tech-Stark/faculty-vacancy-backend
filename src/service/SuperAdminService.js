@@ -13,9 +13,10 @@ async function getDashboardByColleges(days) {
 
     var newteachers = groupBy(teachers, v => v.collegeName);
     var temp = []
-    let totcurvacancies = 0
-    let totpendingvacancies = 0
+   
     for (let key in newteachers) {
+        let totcurvacancies = 0
+        let totpendingvacancies = 0
         var mbj = { "collegeName": newteachers[key][0].collegeName, "collegeId": newteachers[key][0].collegeId };
         const groupBy = (x, f) => x.reduce((a, b) => ((a[f(b)] ||= []).push(b), a), {});
 
@@ -24,7 +25,7 @@ async function getDashboardByColleges(days) {
         for (let k in depteachers) {
             var depteachs = depteachers[k];
             var curvacancies = depteachs.length;
-
+            totcurvacancies+=curvacancies;
             let depname = depteachers[k][0].department;
 
             var pendvac = [];
@@ -34,14 +35,19 @@ async function getDashboardByColleges(days) {
                 }
             }
             var pendingVacanciesCount = pendvac.length;
+            totpendingvacancies+=pendingVacanciesCount;
             var obj = { "department": depname, "currentVacCount": curvacancies, "pendingVacancies": pendvac,"pendingVacCount":pendingVacanciesCount }
             tmp.push(obj);
 
         }
+
         mbj.vacancies = tmp;
+        mbj.totpendingvacancies=totpendingvacancies;
+        mbj.totcurvacancies=totcurvacancies;
         temp.push(mbj)
 
     }
+    console.log(temp)
 
         return temp
 
@@ -80,6 +86,7 @@ async function getDashboardByColleges(days) {
             for (let k in depteachers) {
                 var depteachs = depteachers[k];
                 var curvacancies = depteachs.length;
+                totcurvacancies+=curvacancies;
 
                 let clgname = depteachers[k][0].collegeName;
 
@@ -90,11 +97,14 @@ async function getDashboardByColleges(days) {
                     }
                 }
                 var pendingVacanciesCount = pendvac.length;
+                totpendingvacancies+=pendingVacanciesCount;
                 var obj = { "college":clgname, "currentVacCount": curvacancies, "pendingVacancies": pendvac,"pendingVacCount":pendingVacanciesCount }
                 tmp.push(obj);
 
             }
             mbj.vacancies = tmp;
+            mbj.totpendingvacancies=totpendingvacancies;
+            mbj.totcurvacancies=totcurvacancies;
             temp.push(mbj)
 
         }
