@@ -284,6 +284,23 @@ router.post('/markcompleted/:vacancyId', async (req, res, next) => {
     }
 })
 
+router.get('/getvacancydetail/:vacancyId', async(req, res, next) =>{
+    if(req.role != "admin"){
+        res.status(403).json({"error":"unauthorized"});
+    }
+    else{
+
+        try {
+            const vacancy = await Vacancy.findOne({vacancyId: req.params.vacancyId})
+            console.log(vacancy)
+            res.json(vacancy)
+        }
+        catch (err) {
+            next(err);
+        }
+    }
+})
+
 router.get('/getsubscribedteachers/:vacancyId', async (req, res, next) => {
     if(req.role != "admin"){
         res.status(403).json({"error":"unauthorized"});
