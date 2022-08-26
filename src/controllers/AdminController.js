@@ -92,6 +92,16 @@ router.get('/getmycollegeteachers', async (req, res, next) => {
     }
 })
 
+function compare( a, b ) {
+    if ( parseInt(a.daysToRetire) < parseInt(b.daysToRetire) ){
+      return -1;
+    }
+    if ( parseInt(a.daysToRetire > b.daysToRetire) ){
+      return 1;
+    }
+    return 0;
+  }
+
 router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
     if(req.role != "admin"){
         res.status(403).json({"error":"unauthorized"});
@@ -138,6 +148,8 @@ router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
                 }
     
             }
+            // console.log(tmp);
+            tmp.sort(compare);
             res.json(tmp);
         }
         catch (err) {
