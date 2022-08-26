@@ -17,6 +17,7 @@ async function createVacancy(params){
     {
         const vacancy = new Vacancy(params);
         vacancy.vacancyId = uuidv4();
+        vacancy.emailProfReplaced = email;
         vacancy.collegeId = collegeId;
         vacancy.location = location;
         vacancy.minimumQualification = minimumQualification;
@@ -24,6 +25,7 @@ async function createVacancy(params){
         vacancy.compensation = compensation;
         vacancy.status = "open";
         vacancy.dateCreated = Date.now();
+        console.log(vacancy)
         vacancy
             .save()
     }

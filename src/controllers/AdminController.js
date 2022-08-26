@@ -12,6 +12,7 @@ const bcrypt = require('bcryptjs')
 const masterDataService = require('../service/MasterDataService')
 const profileService = require('../service/ProfileService');
 const College = require('../models/CollegeModel.js');
+const Vacancy = require('../models/VacancyModel')
 
 router.post('/login', async (req, res, next) => {
 
@@ -125,6 +126,11 @@ function compare( a, b ) {
     return 0;
   }
 
+function addDays(date, days) {
+var result = new Date(date);
+result.setDate(result.getDate() + days);
+return result;
+}
 router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
     if(req.role != "admin"){
         res.status(403).json({"error":"unauthorized"});
@@ -156,6 +162,9 @@ router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
                     let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
                     return TotalDays;
                 }
+                if(allUsers[i].isContractual == "true"){
+                    dob.addDays(contractLength)
+                }
                 var diffDays = days(dob, todayDate);
                 logger.log.trace(diffDays + " days to retirement");
                 var noOfDays = req.params.noOfDays
@@ -164,7 +173,9 @@ router.get('/getvacancyfordays/:noOfDays', async (req, res, next) => {
                 if (diffDays <= noOfDays && (allUsers[i].exit == "none" || allUsers[i].exit == "pending")) {
                     // adjusting for dob
                     dob.setFullYear(dob.getFullYear() - masterData.RetirementAge); 
-                    
+                    if(allUsers[i].isContractual == "true"){
+                        dob.addDays(-contractLength)
+                    }   
                     allUsers[i].exit = "pending";
                     allUsers[i].daysToRetire = diffDays;
                     tmp.push(allUsers[i]);
@@ -341,6 +352,45 @@ router.get('/getmycollegedata', async (req, res) => {
 
 })
 
+router.post('/rehire/:vacancyId', async(req, res, next) => {
+    if(req.role != "admin"){
+        res.status(403).json({"error":"unauthorized"});
+    }
+    else{  
+        try{
+            const contractLength = req.body.contractLength;
+            const vacancy = await Vacancy.find({vacancyId:req.params.vacancyId})
+            const emailProfReplaced =  vacancy[0].emailProfReplaced;
+            console.log(emailProfReplaced)
+            if(emailProfReplaced == null){
+                res.status(400).json({error:"Retiring Prof doesn't exist"})
+            }
+            else if(vacancy.status == "completed"){
+                res.status(400).json({error:"Vacancy is not open"})
+            }
+            else{
+
+                logger.log.trace(contractLength)
+                const user = await User.find({email:emailProfReplaced})
+                user.isContractual = "true";
+                user.contractLength = contractLength;
+
+
+                // close this vacancy -> move to completed. 
+                const vacancy = await vacancyService.markCompleted(req.params.vacancyId);
+                const updatedUser = await userServices.updateUser(user)
+                res.json({success:"true"})
+                
+            }
+
+        }      
+        catch(err){
+            next(err)
+        }
+    }
+    
+    
+})
 
 // total capacity post req
 
