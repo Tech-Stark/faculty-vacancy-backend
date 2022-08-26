@@ -100,8 +100,13 @@ async function getAllTeachersX()
     return teachers
 }
 
-async function getCollegeTeachers(collegeId){
-    const teachers = await User.find({collegeId:collegeId, exit:{$ne:"exit"}});
+async function getCollegeTeachers(collegeId){ 
+    const newteachers=await User.find({collegeId:collegeId, exit:{$ne:"exit"}});
+    const teachers=newteachers.filter(checknotadmin)
+    function checknotadmin(newteacher)
+    {
+        return (newteacher.email!="admin@nitdgp.com"&&newteacher.email!="superadmin@aicte.com"&&newteacher.email!="admin@nitk.com")
+    }
     return teachers; 
 }
 
