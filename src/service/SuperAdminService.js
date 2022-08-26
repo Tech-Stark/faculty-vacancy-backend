@@ -1,21 +1,153 @@
-const College =require('../models/CollegeModel')
+const { Console } = require('winston/lib/winston/transports');
+const College = require('../models/CollegeModel')
 const adminService = require('../service/AdminService')
+const userServices = require('../service/UserService')
 
-function getDashboard(days){
-    // const clgs = await College.find();
-    // const collegeName = clgs.map((clg)=>clg.name);
-    // const collegeId = await College.find({collegeId});
-    // const collegeData=[];
+async function getDashboardByColleges(days) {
 
-    // for(let i = 0; i<clgs.length; i++){
-    //     const lengthOfRetiringTeachers = adminService.getVacancyForDays(days).length;
-    //     const lengthOfNotCreatedVacancyTeachers = adminService.getVacancy
-    // }
+    const teachers = await adminService.getretiringteachersbydays(days);
 
-    const data=[{"collegeId":"1","collegeName":"National Institute of Technology, Durgapur","currentVacancies":"10","createdVacancies":"9","pendingVacancies":"1"},{"collegeId":"2","collegeName":"National Institute of Technology, Surathkal", "currentVacancies":"24","createdVacancies":"5","pendingVacancies":"19"}, {"collegeId":"3","collegeName":"Indian Institute of Technology, Bombay","currentVacancies":"30","createdVacancies":"28","pendingVacancies":"2"}, {"collegeId":"4","collegeName":"National Institute of Technology, Rourkela","currentVacancies":"12","createdVacancies":"12","pendingVacancies":"0"}, {"collegeId":"5","collegeName":"Indian Institute of Technology (Banaras Hindu University), Varanasi","currentVacancies":"44","createdVacancies":"43","pendingVacancies":"1"}, {"collegeId":"6","collegeName":"Indian Institute of Technology, Kharagpur","currentVacancies":"15","createdVacancies":"2","pendingVacancies":"13"}, {"collegeId":"8","collegeName":"Indian Institute of Technology, Delhi","currentVacancies":"22","createdVacancies":"10","pendingVacancies":"12"}, {"collegeId":"9","collegeName":"Delhi Technological University, Delhi","currentVacancies":"7","createdVacancies":"7","pendingVacancies":"0"}, {"collegeId":"10","collegeName":"National Institute of Technology, Bhopal","currentVacancies":"21","createdVacancies":"20","pendingVacancies":"1"}, {"collegeId":"11","collegeName":"Indian Institute of Technology, Roorkee","currentVacancies":"0","createdVacancies":"0","pendingVacancies":"0"}, {"collegeId":"12","collegeName":"Indian Institute of Technology, Guwahati","currentVacancies":"18","createdVacancies":"9","pendingVacancies":"9"}]
-    return data; 
-}
 
-module.exports = {
-    getDashboard,
-};
+    const groupBy = (x, f) => x.reduce((a, b) => ((a[f(b)] ||= []).push(b), a), {});
+
+
+    var newteachers = groupBy(teachers, v => v.collegeName);
+    var temp = []
+    let totcurvacancies = 0
+    let totpendingvacancies = 0
+    for (let key in newteachers) {
+        var mbj = { "collegeName": newteachers[key][0].collegeName, "collegeId": newteachers[key][0].collegeId };
+        const groupBy = (x, f) => x.reduce((a, b) => ((a[f(b)] ||= []).push(b), a), {});
+
+        var depteachers = groupBy(newteachers[key], v => v.department);
+        var tmp = [];
+        for (let k in depteachers) {
+            var depteachs = depteachers[k];
+            var curvacancies = depteachs.length;
+
+            let depname = depteachers[k][0].department;
+
+            var pendvac = [];
+            for (let i = 0; i < depteachs.length; i++) {
+                if (depteachs[i].exit == "pending") {
+                    pendvac.push(depteachs[i]);
+                }
+            }
+            var pendingVacanciesCount = pendvac.length;
+            var obj = { "department": depname, "currentVacCount": curvacancies, "pendingVacancies": pendvac,"pendingVacCount":pendingVacanciesCount }
+            tmp.push(obj);
+
+        }
+        mbj.vacancies = tmp;
+        temp.push(mbj)
+
+    }
+
+        return temp
+
+    }
+    async function getDashboardByLocations(days) {
+    
+        const teachers = await adminService.getretiringteachersbydays(days);
+      
+        const colleges=College.find();
+        for(let i=0;i<teachers.length;i++)
+        {
+            for(let j=0;j<colleges.length;j++)
+            {
+                if(teachers[i].collegeName===colleges[j].name)
+                {
+                        
+                    teachers[i].location=colleges[j].location;
+                }
+            }
+        }
+        console.log(teachers)
+
+        const groupBy = (x, f) => x.reduce((a, b) => ((a[f(b)] ||= []).push(b), a), {});
+
+
+        var newteachers = groupBy(teachers, v => v.location);
+        var temp = []
+        let totcurvacancies = 0
+        let totpendingvacancies = 0
+        for (let key in newteachers) {
+            var mbj = { "location": newteachers[key][0].location};
+            const groupBy = (x, f) => x.reduce((a, b) => ((a[f(b)] ||= []).push(b), a), {});
+
+            var depteachers = groupBy(newteachers[key], v => v.collegeName);
+            var tmp = [];
+            for (let k in depteachers) {
+                var depteachs = depteachers[k];
+                var curvacancies = depteachs.length;
+
+                let clgname = depteachers[k][0].collegeName;
+
+                var pendvac = [];
+                for (let i = 0; i < depteachs.length; i++) {
+                    if (depteachs[i].exit == "pending") {
+                        pendvac.push(depteachs[i]);
+                    }
+                }
+                var pendingVacanciesCount = pendvac.length;
+                var obj = { "college":clgname, "currentVacCount": curvacancies, "pendingVacancies": pendvac,"pendingVacCount":pendingVacanciesCount }
+                tmp.push(obj);
+
+            }
+            mbj.vacancies = tmp;
+            temp.push(mbj)
+
+        }
+        return temp;
+    }
+
+    async function getDashboardByCollegeAndDepartment(days, collegeId, department) {
+        const newteachs = await adminService.getretiringteachersbydays(days);
+        const teachers = newteachs.filter(check)
+        function check(teacher) {
+            return teacher.collegeId == collegeId && teacher.department == department;
+        }
+        console.log(teachers)
+
+        const groupBy = (x, f) => x.reduce((a, b) => ((a[f(b)] ||= []).push(b), a), {});
+
+
+        var newteachers = groupBy(teachers, v => v.collegeName);
+        var temp = []
+        let totcurvacancies = 0
+        let totpendingvacancies = 0
+        for (let key in newteachers) {
+            var mbj = { "collegeName": newteachers[key][0].collegeName, "collegeId": newteachers[key][0].collegeId };
+            const groupBy = (x, f) => x.reduce((a, b) => ((a[f(b)] ||= []).push(b), a), {});
+
+            var depteachers = groupBy(newteachers[key], v => v.department);
+            var tmp = [];
+            for (let k in depteachers) {
+                var depteachs = depteachers[k];
+                var curvacancies = depteachs.length;
+
+                let depname = depteachers[k][0].department;
+
+                var pendvac = [];
+                for (let i = 0; i < depteachs.length; i++) {
+                    if (depteachs[i].exit == "pending") {
+                        pendvac.push(depteachs[i]);
+                    }
+                }
+                var pendingVacanciesCount = pendvac.length;
+                var obj = { "department": depname, "currentVacCount": curvacancies, "pendingVacancies": pendvac,"pendingVacCount":pendingVacanciesCount }
+                tmp.push(obj);
+
+            }
+            mbj.vacancies = tmp;
+            temp.push(mbj)
+
+        }
+        return temp;
+    }
+
+    module.exports = {
+        getDashboardByColleges,
+        getDashboardByCollegeAndDepartment,
+        getDashboardByLocations
+    };

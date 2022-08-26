@@ -89,6 +89,16 @@ async function getAllTeachers()
     }
     return teachers
 }
+async function getAllTeachersX()
+{
+    const newteachers=await User.find();
+    const teachers=newteachers.filter(checknotadmin)
+    function checknotadmin(newteacher)
+    {
+        return (newteacher.email!="admin@nitdgp.com"&&newteacher.email!="superadmin@aicte.com")
+    }
+    return teachers
+}
 
 async function getCollegeTeachers(collegeId){
     const teachers = await User.find({collegeId:collegeId, exit:{$ne:"exit"}});
@@ -154,5 +164,6 @@ module.exports = {
     getCollegeTeachers,
     changePassword,
     fillUsers,
-    modLocations
+    modLocations,
+    getAllTeachersX
 };

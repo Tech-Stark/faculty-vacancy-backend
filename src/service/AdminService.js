@@ -5,6 +5,8 @@ const Subscription= require('../models/SubscriptionModel');
 const Vacancy = require('../models/VacancyModel');
 const Department=require('../models/DepartmentModel');
 const College =require('../models/CollegeModel')
+const masterDataService = require('../service/MasterDataService')
+const userServices = require('../service/UserService.js')
 
 function getAllAdminData() {
     return AdminData.find()
@@ -90,6 +92,35 @@ async function getMyCollegeData(collegeId)
     return newcollege
 }
 
+async function getretiringteachersbydays(noOfDays)
+{
+    var masterData = await masterDataService.getMasterData()
+    var allUsers = await userServices.getAllTeachersX();
+    var tmp = [];
+    for (let i = 0; i < allUsers.length; i++) {
+        const dob = allUsers[i].dob;    
+        if (dob == null) continue;
+        dob.setFullYear(dob.getFullYear() + masterData.RetirementAge);
+        var todayDate = new Date();
+        const days = (dob, todayDate) => {
+            let difference = dob.getTime() - todayDate.getTime();
+            let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+            return TotalDays;
+        }
+        var diffDays = days(dob, todayDate);
+        if (diffDays <= noOfDays && (allUsers[i].exit == "none" || allUsers[i].exit == "pending")) {
+            // adjusting for dob
+            dob.setFullYear(dob.getFullYear() - masterData.RetirementAge); 
+            
+            allUsers[i].exit = "pending";
+            allUsers[i].daysToRetire = diffDays;
+            tmp.push(allUsers[i]);
+        }
+
+    }
+    return tmp;
+}
+
 
 
 module.exports = {
@@ -97,5 +128,6 @@ module.exports = {
     getAllSubscribedTeachers,
     getDashboard,
     createCollege,
-    getMyCollegeData
+    getMyCollegeData,
+    getretiringteachersbydays
 };
