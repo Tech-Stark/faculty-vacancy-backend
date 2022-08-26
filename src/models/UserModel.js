@@ -20,11 +20,11 @@ const UserSchema = new Schema({
     lastName: {
         type: String,
     },
-    position:{
-        type:String
+    position: {
+        type: String
     },
-    department:{
-        type:String
+    department: {
+        type: String
     },
     profileId: {
         type: String,
@@ -33,11 +33,11 @@ const UserSchema = new Schema({
     collegeId: {
         type: String,
     },
-    collegeName:{
-        type:String,
+    collegeName: {
+        type: String,
     },
-    location:{
-        type:String,
+    location: {
+        type: String,
     },
     isOpenToWork: {
         type: Boolean,
@@ -49,8 +49,11 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now(),
     },
-    daysToRetire:{
+    daysToRetire: {
         type: String,
+    },
+    attachments: {
+        type: String
     },
     exit: {
         type: String,
@@ -68,6 +71,6 @@ UserSchema.set('toJSON', {
     }
 })
 
-const User =  mongoose.model("user", UserSchema);
+const User = mongoose.model("user", UserSchema);
 
 module.exports = User;
