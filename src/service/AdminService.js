@@ -24,21 +24,27 @@ async function getAllSubscribedTeachers(vacancyId){
     {
         return (newteacher.email!="admin@nitdgp.com"&&newteacher.email!="superadmin@aicte.com")
     }
-
     const vacancy= await Vacancy.findOne({vacancyId});
-    console.log(vacancy)
     const department=vacancy.department;
     const college=vacancy.college;
-    const location =vacancy.location;
 
     const subscribedTeachers=[];
 
     for(let i=0;i<teachers.length;i++)
     {
-        const subscription= await Subscription.find({$or:[{profileId:teachers[i].profileId,department,college},{profileId:teachers[i].profileId,department,location}]});
-        if(subscription.length>0){
-            subscribedTeachers.push(teachers[i]);
+        const subscriptions= await Subscription.find({profileId:teachers[i].profileId,department});
+        for(let j=0;j<subscriptions.length;j++)
+        {
+           for(let k=0;k<subscriptions[j].colleges.length;k++)
+           {
+               if(subscriptions[j].colleges[k]==college)
+               {
+                   console.log(subscriptions[j].colleges[k])
+                   subscribedTeachers.push(teachers[i]);
+               }
+           }
         }
+     
     }
     return subscribedTeachers
 
