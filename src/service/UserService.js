@@ -85,7 +85,7 @@ async function getAllTeachers()
     const teachers=newteachers.filter(checknotadmin)
     function checknotadmin(newteacher)
     {
-        return (newteacher.email!="admin@nitdgp.com"&&newteacher.email!="superadmin@aicte.com")
+        return (newteacher.email!="admin@nitdgp.com"&&newteacher.email!="superadmin@aicte.com"&&newteacher.email!="admin@nitk.com")
     }
     return teachers
 }
@@ -95,7 +95,7 @@ async function getAllTeachersX()
     const teachers=newteachers.filter(checknotadmin)
     function checknotadmin(newteacher)
     {
-        return (newteacher.email!="admin@nitdgp.com"&&newteacher.email!="superadmin@aicte.com")
+        return (newteacher.email!="admin@nitdgp.com"&&newteacher.email!="superadmin@aicte.com"&&newteacher.email!="admin@nitk.com")
     }
     return teachers
 }

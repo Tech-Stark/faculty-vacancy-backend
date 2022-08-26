@@ -22,7 +22,7 @@ async function getAllSubscribedTeachers(vacancyId){
     const teachers=newteachers.filter(checknotadmin)
     function checknotadmin(newteacher)
     {
-        return (newteacher.email!="admin@nitdgp.com"&&newteacher.email!="superadmin@aicte.com")
+        return (newteacher.email!="admin@nitdgp.com"&&newteacher.email!="superadmin@aicte.com"&&newteacher.email!="admin@nitk.com")
     }
     const vacancy= await Vacancy.findOne({vacancyId});
     const department=vacancy.department;
@@ -57,7 +57,7 @@ async function getDashboard(collegeId){
     const teachers=newteachers.filter(checknotadmin)
     function checknotadmin(newteacher)
     {
-        return (newteacher.email!="admin@nitdgp.com"&&newteacher.email!="superadmin@aicte.com")
+        return (newteacher.email!="admin@nitdgp.com"&&newteacher.email!="superadmin@aicte.com"&&newteacher.email!="admin@nitk.com")
     }
     const deps=[]
     console.log(vacancies)
