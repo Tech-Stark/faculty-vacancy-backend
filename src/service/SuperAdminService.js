@@ -5,7 +5,7 @@ const userServices = require('../service/UserService')
 
 async function getDashboardByColleges(days) {
 
-    const teachers = await adminService.getretiringteachersbydays(days);
+    const teachers = await adminService.getretiringteachersbydaysx(days);
 
 
     const groupBy = (x, f) => x.reduce((a, b) => ((a[f(b)] ||= []).push(b), a), {});
@@ -54,7 +54,7 @@ async function getDashboardByColleges(days) {
     }
     async function getDashboardByLocations(days) {
     
-        const teachers = await adminService.getretiringteachersbydays(days);
+        const teachers = await adminService.getretiringteachersbydaysx(days);
       
         const colleges=College.find();
         for(let i=0;i<teachers.length;i++)
@@ -112,7 +112,7 @@ async function getDashboardByColleges(days) {
     }
 
     async function getDashboardByCollegeAndDepartment(days, collegeId, department) {
-        const newteachs = await adminService.getretiringteachersbydays(days);
+        const newteachs = await adminService.getretiringteachersbydaysx(days);
         const teachers = newteachs.filter(check)
         function check(teacher) {
             return teacher.collegeId == collegeId && teacher.department == department;
