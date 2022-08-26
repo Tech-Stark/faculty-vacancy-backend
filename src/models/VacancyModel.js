@@ -45,6 +45,10 @@ const VacancySchema = new Schema({
     status:{
         type: String,
         default:"open"
+    },
+    emailProfReplaced:{
+        type:String,
+        default: null
     }
 });
 

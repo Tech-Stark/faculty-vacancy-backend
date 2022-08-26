@@ -58,6 +58,14 @@ const UserSchema = new Schema({
     exit: {
         type: String,
         default: "none"
+    },
+    isContractual:{
+        type:String,
+        default: "false"
+    },
+    contractLength: {
+        type:Number,
+        default: 0
     }
 });
 
