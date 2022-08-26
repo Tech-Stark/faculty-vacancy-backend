@@ -52,7 +52,7 @@ async function getAllSubscribedTeachers(vacancyId){
 
 async function getDashboard(collegeId){
     const departments=await Department.find({collegeId})//capacity
-    const vacancies=await Vacancy.find({collegeId});//vacancy count
+    const vacancies=await Vacancy.find({collegeId,status:"open"});//vacancy count
     const newteachers=await User.find({collegeId});
     const teachers=newteachers.filter(checknotadmin)
     function checknotadmin(newteacher)
